@@ -34,10 +34,10 @@ IoTSharp 是一个开源的物联网基础平台，集设备属性数据管理�
 - 消息队列  我们是通过CAP项目来实现的，因此它支持的理论上我们都支持。 
   - RabbitMQ 我们推荐的。 
   - Kafka   测试似乎正常。 
-  - ZeroMQ  针对出门的ZeroMQ , 我们编写了MaiKeBing.CAP.ZeroMQ 和 MaiKeBing.HostedService.ZeroMQ  以支持它。 
+  - ZeroMQ  针对出名的ZeroMQ , 我们编写了MaiKeBing.CAP.ZeroMQ 和 MaiKeBing.HostedService.ZeroMQ  以支持它。 
   - InMemory 通过它可以不需要依赖任何外接， 这是CAP提供的一种途径。 小项目推荐。 
 - 消息队列存储
-  - PostgreSql 如果全称用PostgreSQL 可以考虑。 
+  - PostgreSql 如果全程用PostgreSQL 可以考虑。 
   - MongoDB  我们推荐的
   - LiteDB  .Net 编写的NoSQL 项目， 小项目推荐， 
   - InMemory 存储在内存， 不依赖于外接。 小项目推荐。 
