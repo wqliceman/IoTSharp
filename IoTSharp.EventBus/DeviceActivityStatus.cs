@@ -1,5 +1,4 @@
-﻿
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 
 namespace IoTSharp.EventBus
 {
@@ -7,10 +6,12 @@ namespace IoTSharp.EventBus
     {
         public Guid DeviceId { get; set; }
         public ActivityStatus Activity { get; set; }
+
         public DeviceActivityStatus()
         {
             DeviceId = Guid.Empty;
         }
+
         public DeviceActivityStatus(Guid deviceId, ActivityStatus activity)
         {
             DeviceId = deviceId;

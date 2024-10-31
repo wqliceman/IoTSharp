@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
@@ -11,6 +7,7 @@ namespace IoTSharp.Data
     {
         [Key]
         public Guid BindId { get; set; }
+
         public Guid EventId { get; set; }
         public SubscriptionEvent Subscription { get; set; }
 
@@ -19,7 +16,5 @@ namespace IoTSharp.Data
         public int Status { get; set; }
 
         public string TaskConfig { get; set; }
-
-    
     }
 }

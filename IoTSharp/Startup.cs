@@ -1,16 +1,26 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core.Configurations;
+﻿using EasyCaching.Core.Configurations;
 using HealthChecks.UI.Client;
+using IoTSharp.Contracts;
 using IoTSharp.Data;
+using IoTSharp.Data.Extensions;
+using IoTSharp.Data.TimeSeries;
+using IoTSharp.EventBus;
+using IoTSharp.EventBus.CAP;
+using IoTSharp.EventBus.Shashlik;
 using IoTSharp.FlowRuleEngine;
+using IoTSharp.Gateways;
 using IoTSharp.Interpreter;
+using IoTSharp.Services;
+using IoTSharp.TaskActions;
 using Jdenticon.AspNetCore;
 using Jdenticon.Rendering;
+using MaiKeBing.HostedService.ZeroMQ;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,23 +28,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MQTTnet.AspNetCore;
 using Newtonsoft.Json.Serialization;
+using Quartz;
+using Quartz.AspNetCore;
+using Storage.Net;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using IoTSharp.Gateways;
-using MaiKeBing.HostedService.ZeroMQ;
-using IoTSharp.TaskActions;
-using IoTSharp.Contracts;
-using IoTSharp.EventBus.CAP;
-using IoTSharp.EventBus.Shashlik;
-using Microsoft.EntityFrameworkCore;
-using Storage.Net;
-using IoTSharp.Data.TimeSeries;
-using IoTSharp.Data.Extensions;
-using Quartz;
-using IoTSharp.Services;
-using Quartz.AspNetCore;
 
 namespace IoTSharp
 {
@@ -91,18 +91,22 @@ namespace IoTSharp
                 case DataBaseType.Sqlite:
                     services.ConfigureSqlite(Configuration.GetConnectionString("IoTSharp"), settings.DbContextPoolSize, healthChecks, healthChecksUI);
                     break;
+
                 case DataBaseType.InMemory:
                     services.ConfigureInMemory(settings.DbContextPoolSize, healthChecksUI);
                     settings.TelemetryStorage = TelemetryStorage.SingleTable;
                     break;
+
                 case DataBaseType.Cassandra:
                     services.ConfigureCassandra(Configuration.GetConnectionString("IoTSharp"), settings.DbContextPoolSize, healthChecks, healthChecksUI);
                     settings.TelemetryStorage = TelemetryStorage.SingleTable;
                     break;
+
                 case DataBaseType.ClickHouse:
                     services.ConfigureClickHouse(Configuration.GetConnectionString("IoTSharp"), settings.DbContextPoolSize, healthChecks, healthChecksUI);
                     settings.TelemetryStorage = TelemetryStorage.SingleTable;
                     break;
+
                 case DataBaseType.PostgreSql:
                 default:
                     services.ConfigureNpgsql(Configuration.GetConnectionString("IoTSharp"), settings.DbContextPoolSize, healthChecks, healthChecksUI);
@@ -114,10 +118,6 @@ namespace IoTSharp
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
-
-
 
             services.AddAuthentication(option =>
             {
@@ -206,7 +206,7 @@ namespace IoTSharp
                         break;
                 }
             });
-            services.AddTelemetryStorage( settings, healthChecks,o=>
+            services.AddTelemetryStorage(settings, healthChecks, o =>
             {
                 switch (settings.DataBase)
                 {
@@ -225,11 +225,11 @@ namespace IoTSharp
                     case DataBaseType.Sqlite:
                         o.UseSQLiteToSharding();
                         break;
+
                     case DataBaseType.PostgreSql:
                     default:
                         o.UseNpgsqlToSharding();
                         break;
-
                 }
             });
             var zmq = Configuration.GetSection(nameof(ZMQOption)).Get<ZMQOption>();
@@ -248,9 +248,11 @@ namespace IoTSharp
                     case EventBusFramework.Shashlik:
                         opt.UserShashlik();
                         break;
+
                     case EventBusFramework.CAP:
                         opt.UserCAP();
                         break;
+
                     default:
                         opt.UserShashlik();
                         break;
@@ -274,15 +276,10 @@ namespace IoTSharp
             services.AddTransient<PublishAlarmDataTask>();
             services.AddTransient<RawDataGateway>();
             services.AddTransient<KepServerEx>();
-            
         }
 
-      
-
-
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment() || !env.IsEnvironment("Production"))
             {
@@ -299,7 +296,7 @@ namespace IoTSharp
             }
             app.CheckApplicationDBMigrations();
             //添加定时任务创建表
-     
+
             app.UseRouting();
             app.UseCors(option => option
                 .AllowAnyOrigin()

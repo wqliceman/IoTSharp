@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
-    public class DynamicFormFieldValueInfo :IJustMy
+    public class DynamicFormFieldValueInfo : IJustMy
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         public long FieldValueId { get; set; }
+
         public long FieldId { get; set; }
         public string FieldName { get; set; }
         public string FieldValue { get; set; }

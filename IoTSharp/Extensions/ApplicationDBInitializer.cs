@@ -1,6 +1,7 @@
-﻿using IoTSharp.Dtos;
+﻿using IoTSharp.Contracts;
+using IoTSharp.Dtos;
+using IoTSharp.Models.FormFieldTypes;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,8 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using IoTSharp.Models.FormFieldTypes;
-using IoTSharp.Contracts;
 
 namespace IoTSharp.Data
 {
@@ -57,11 +56,9 @@ namespace IoTSharp.Data
             }
         }
 
-         
-
         public async Task SeedDictionary()
         {
-            var controltype = this._context.BaseDictionaryGroups.Add(new BaseDictionaryGroup { DictionaryGroupName = "控件类型",  DictionaryGroupStatus = 1});
+            var controltype = this._context.BaseDictionaryGroups.Add(new BaseDictionaryGroup { DictionaryGroupName = "控件类型", DictionaryGroupStatus = 1 });
             this._context.SaveChanges();
             var datatype = this._context.BaseDictionaryGroups.Add(new BaseDictionaryGroup { DictionaryGroupName = "数据类型", DictionaryGroupStatus = 1 });
             this._context.SaveChanges();
@@ -104,14 +101,12 @@ namespace IoTSharp.Data
             this._context.BaseDictionaries.Add(new BaseDictionary { DictionaryName = "DateTimeOffset[]", DictionaryTag = typeof(DateTimeOffset[]).FullName, DictionaryValue = "16", Dictionary18NKeyName = "dic.types.datetimeoffsetarray", DictionaryStatus = 1, DictionaryGroupId = datatype.Entity.DictionaryGroupId, DictionaryDesc = "", DictionaryIcon = "" });
 
             await this._context.SaveChangesAsync();
-
         }
-
 
         public async Task SeedUserAsync(InstallDto model)
         {
-            var tenant = _context.Tenant.FirstOrDefault(t => t.Email == model.TenantEMail && t.Deleted==false);
-            var customer = _context.Customer.FirstOrDefault(t => t.Email == model.CustomerEMail && t.Deleted==false);
+            var tenant = _context.Tenant.FirstOrDefault(t => t.Email == model.TenantEMail && t.Deleted == false);
+            var customer = _context.Customer.FirstOrDefault(t => t.Email == model.CustomerEMail && t.Deleted == false);
             if (tenant == null && customer == null)
             {
                 tenant = new Tenant() { Id = Guid.NewGuid(), Name = model.TenantName, Email = model.TenantEMail };
@@ -144,7 +139,6 @@ namespace IoTSharp.Data
                     await _signInManager.UserManager.AddToRoleAsync(user, nameof(UserRole.CustomerAdmin));
                     await _signInManager.UserManager.AddToRoleAsync(user, nameof(UserRole.TenantAdmin));
                     await _signInManager.UserManager.AddToRoleAsync(user, nameof(UserRole.SystemAdmin));
-
                 }
                 else
                 {

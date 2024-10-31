@@ -1,28 +1,19 @@
-﻿
+﻿using IoTSharp.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
-using static IoTSharp.EventBus.EventBusOption;
 using Shashlik.EventBus;
-using Shashlik.EventBus.PostgreSQL;
-using Shashlik.EventBus.MySql;
-using Shashlik.EventBus.SqlServer;
-using Shashlik.EventBus.MemoryStorage;
-using Shashlik.EventBus.RabbitMQ;
 using Shashlik.EventBus.Kafka;
 using Shashlik.EventBus.MemoryQueue;
+using Shashlik.EventBus.MemoryStorage;
+using Shashlik.EventBus.MySql;
+using Shashlik.EventBus.PostgreSQL;
+using Shashlik.EventBus.RabbitMQ;
+using Shashlik.EventBus.SqlServer;
 
 namespace IoTSharp.EventBus.Shashlik
 {
     public static class DependencyInjection
     {
-
         public static IApplicationBuilder UseShashlikEventBus(this IApplicationBuilder app)
         {
             var provider = app.ApplicationServices;
@@ -57,14 +48,18 @@ namespace IoTSharp.EventBus.Shashlik
                 case EventBusStore.MongoDB:
 
                     break;
+
                 case EventBusStore.LiteDB:
                     break;
+
                 case EventBusStore.MySql:
                     builder.AddMySql(_EventBusStore);
                     break;
+
                 case EventBusStore.SqlServer:
                     builder.AddSqlServer(_EventBusStore);
                     break;
+
                 case EventBusStore.InMemory:
                 default:
                     builder.AddMemoryStorage();
@@ -94,19 +89,26 @@ namespace IoTSharp.EventBus.Shashlik
                         cfg.AddOrUpdate("allow.auto.create.topics", "true");
                     });
                     break;
+
                 case EventBusMQ.InMemory:
                     builder.AddMemoryQueue();
                     break;
+
                 case EventBusMQ.ZeroMQ:
                     break;
+
                 case EventBusMQ.AzureServiceBus:
                     break;
+
                 case EventBusMQ.AmazonSQS:
                     break;
+
                 case EventBusMQ.RedisStreams:
                     break;
+
                 case EventBusMQ.NATS:
                     break;
+
                 case EventBusMQ.Pulsar:
                     break;
 

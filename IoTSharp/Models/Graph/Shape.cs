@@ -2,7 +2,6 @@
 {
     public class Shape
     {
-
         public long id { get; set; }
 
         public long[] incomes { get; set; }
@@ -12,6 +11,5 @@
         public DeviceProp? prop { get; set; }
 
 #nullable disable
-
     }
 }

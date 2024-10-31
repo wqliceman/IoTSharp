@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace IoTSharp.Sdk.Http
+﻿namespace IoTSharp.Sdk.Http
 {
-
     public class InstallRresult
     {
         public string result { get; set; }
@@ -39,14 +36,14 @@ namespace IoTSharp.Sdk.Http
             BaseUrl = url;
         }
     }
-    public partial class DevicesClient  
+
+    public partial class DevicesClient
     {
-        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings)
+        private partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings)
         {
             //settings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
             //settings.DateParseHandling = Newtonsoft.Json.DateParseHandling.DateTime;
             //settings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
         }
     }
- 
 }

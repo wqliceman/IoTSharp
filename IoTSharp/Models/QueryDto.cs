@@ -1,5 +1,4 @@
 ﻿using System;
-using IoTSharp.Data;
 
 namespace IoTSharp.Controllers.Models
 {
@@ -9,10 +8,12 @@ namespace IoTSharp.Controllers.Models
         /// 当前页开始行
         /// </summary>
         public int Offset { get; set; } = 0;
+
         /// <summary>
         /// 页行数
         /// </summary>
         public int Limit { get; set; } = 10;
+
         /// <summary>
         /// 名称 用于模糊查询
         /// </summary>
@@ -24,7 +25,6 @@ namespace IoTSharp.Controllers.Models
         public Guid Id { get; set; }
     }
 
-
     public class AlarmParam : QueryDto
     {
         public Guid? OriginatorId { get; set; }
@@ -34,26 +34,23 @@ namespace IoTSharp.Controllers.Models
         public DateTime[] StartDateTime { get; set; }
         public int OriginatorType { get; set; }
 
-
         public DateTime[] EndDateTime { get; set; }
         public DateTime[] AckDateTime { get; set; }
 
         public string AlarmType { get; set; }
     }
+
     public class DeviceParam : QueryDto
     {
-
         public Guid customerId { get; set; }
 
         public Guid ruleId { get; set; }
 
         public bool OnlyActive { get; set; }
-
     }
 
     public class RulePageParam : QueryDto
     {
-
         public string Creator { get; set; }
         public DateTime[] CreatTime { get; set; }
     }
@@ -77,6 +74,7 @@ namespace IoTSharp.Controllers.Models
     {
         public string KeyName { get; set; }
     }
+
     /// <summary>
     /// 租户的客户查询
     /// </summary>
@@ -87,6 +85,7 @@ namespace IoTSharp.Controllers.Models
         /// </summary>
         public Guid tenantId { get; set; }
     }
+
     /// <summary>
     /// 客户的用户查询
     /// </summary>
@@ -97,8 +96,4 @@ namespace IoTSharp.Controllers.Models
         /// </summary>
         public Guid CustomerId { get; set; }
     }
-
-
-
-
 }

@@ -53,7 +53,7 @@ namespace IoTSharp.FlowRuleEngine
             ""RuleExpressionType"":"LambdaExpression"",
             ""Expression"":""Age > 18""
           },
-         { 
+         {
             ""RuleName"" :"CheckIDNoIsEmpty"",
             ""ErrorMessage”":""身份证号不可以为空."",
             ""ErrorType"":"Error"",

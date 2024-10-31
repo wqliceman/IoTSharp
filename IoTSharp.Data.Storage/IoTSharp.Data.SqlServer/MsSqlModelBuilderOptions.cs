@@ -14,7 +14,6 @@ namespace IoTSharp.Data.SqlServer
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
         }
     }
 }

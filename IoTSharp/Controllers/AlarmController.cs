@@ -6,12 +6,12 @@ using IoTSharp.Extensions;
 using IoTSharp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShardingCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ShardingCore.Extensions;
 
 namespace IoTSharp.Controllers
 {
@@ -51,13 +51,13 @@ namespace IoTSharp.Controllers
 
                     case OriginatorType.Gateway:
                         originator =
-                            _context.Gateway.FirstOrDefault(d =>( d.Id.ToString() == oname || d.Name == oname) && d.Deleted == false)?.Id ??
+                            _context.Gateway.FirstOrDefault(d => (d.Id.ToString() == oname || d.Name == oname) && d.Deleted == false)?.Id ??
                             Guid.Empty;
                         break;
 
                     case OriginatorType.Asset:
                         originator =
-                            _context.Assets.FirstOrDefault(d => (d.Id.ToString() == oname || d.Name == oname) && d.Deleted==false)?.Id ??
+                            _context.Assets.FirstOrDefault(d => (d.Id.ToString() == oname || d.Name == oname) && d.Deleted == false)?.Id ??
                             Guid.Empty;
                         break;
 
@@ -86,13 +86,11 @@ namespace IoTSharp.Controllers
 
             if (m.AckDateTime != null && m.AckDateTime.Length == 2)
             {
-
                 condition = condition.And(x => x.AckDateTime > m.AckDateTime[0] && x.AckDateTime < m.AckDateTime[1]);
             }
 
             if (m.ClearDateTime != null && m.ClearDateTime.Length == 2)
             {
-
                 condition = condition.And(x =>
                     x.ClearDateTime > m.ClearDateTime[0] && x.ClearDateTime < m.ClearDateTime[1]);
             }
@@ -123,8 +121,7 @@ namespace IoTSharp.Controllers
                 condition = condition.And(x => x.Serverity == (ServerityLevel)m.Serverity);
             }
 
-
-            if (m.OriginatorType >0)
+            if (m.OriginatorType > 0)
             {
                 condition = condition.And(x => x.OriginatorType == (OriginatorType)m.OriginatorType);
 
@@ -155,11 +152,8 @@ namespace IoTSharp.Controllers
                         StartDateTime = c.StartDateTime,
                         Originator = GetOriginator(c)
                     }).ToList()
-
             });
         }
-
-
 
         private object GetOriginator(Alarm Alarm)
         {
@@ -168,6 +162,7 @@ namespace IoTSharp.Controllers
                 case OriginatorType.Unknow:
 
                     break;
+
                 case OriginatorType.Device:
                     return _context.Device.SingleOrDefault(c => c.Id == Alarm.OriginatorId);
 
@@ -176,7 +171,6 @@ namespace IoTSharp.Controllers
 
                 case OriginatorType.Asset:
                     return _context.Assets.SingleOrDefault(c => c.Id == Alarm.OriginatorId);
-
             }
 
             return null;
@@ -214,7 +208,6 @@ namespace IoTSharp.Controllers
                                         c.Tenant.Id == profile.Tenant).Select(c => new ModelOriginatorItem
                                         { Id = c.Id, Name = c.Name }).ToListAsync());
             }
-
         }
 
         /// <summary>
@@ -225,7 +218,6 @@ namespace IoTSharp.Controllers
         [HttpPost]
         public async Task<ApiResult<bool>> AckAlarm([FromBody] AlarmStatusDto m)
         {
-
             var alarm = await _context.Alarms.SingleOrDefaultAsync(c => c.Id == m.Id);
             if (alarm != null)
             {
@@ -239,19 +231,14 @@ namespace IoTSharp.Controllers
                 {
                     alarm.AlarmStatus = AlarmStatus.Cleared_Act;
                     alarm.AckDateTime = DateTime.UtcNow;
-
                 }
                 _context.Alarms.Update(alarm);
                 await _context.SaveChangesAsync();
                 return new ApiResult<bool>(ApiCode.Success, "Alarm acknowledged", true);
-
             }
-
-
 
             return new ApiResult<bool>(ApiCode.CantFindObject, "Not found alarm", false);
         }
-
 
         /// <summary>
         /// 清除告警信息
@@ -261,7 +248,6 @@ namespace IoTSharp.Controllers
         [HttpPost]
         public async Task<ApiResult<bool>> ClearAlarm([FromBody] AlarmStatusDto m)
         {
-
             var alarm = await _context.Alarms.SingleOrDefaultAsync(c => c.Id == m.Id);
             if (alarm != null)
             {
@@ -269,18 +255,15 @@ namespace IoTSharp.Controllers
                 {
                     alarm.AlarmStatus = AlarmStatus.Cleared_Act;
                     alarm.ClearDateTime = DateTime.UtcNow;
-
                 }
                 if (alarm.AlarmStatus == AlarmStatus.Active_UnAck)
                 {
                     alarm.AlarmStatus = AlarmStatus.Active_Ack;
                     alarm.ClearDateTime = DateTime.UtcNow;
-
                 }
                 _context.Alarms.Update(alarm);
                 await _context.SaveChangesAsync();
                 return new ApiResult<bool>(ApiCode.Success, "Alarm cleared", true);
-
             }
             return new ApiResult<bool>(ApiCode.CantFindObject, "Not found alarm", false);
         }

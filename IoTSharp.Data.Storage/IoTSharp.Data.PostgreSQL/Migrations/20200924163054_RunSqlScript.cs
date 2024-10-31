@@ -13,7 +13,7 @@ CREATE TABLE qrtz_job_details
 	job_name  TEXT NOT NULL,
     job_group TEXT NOT NULL,
     description TEXT NULL,
-    job_class_name   TEXT NOT NULL, 
+    job_class_name   TEXT NOT NULL,
     is_durable BOOL NOT NULL,
     is_nonconcurrent BOOL NOT NULL,
     is_update_data BOOL NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE qrtz_triggers
     sched_name TEXT NOT NULL,
 	trigger_name TEXT NOT NULL,
     trigger_group TEXT NOT NULL,
-    job_name  TEXT NOT NULL, 
+    job_name  TEXT NOT NULL,
     job_group TEXT NOT NULL,
     description TEXT NULL,
     next_fire_time BIGINT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE qrtz_triggers
     misfire_instr SMALLINT NULL,
     job_data BYTEA NULL,
     PRIMARY KEY (sched_name,trigger_name,trigger_group),
-    FOREIGN KEY (sched_name,job_name,job_group) 
-		REFERENCES qrtz_job_details(sched_name,job_name,job_group) 
+    FOREIGN KEY (sched_name,job_name,job_group)
+		REFERENCES qrtz_job_details(sched_name,job_name,job_group)
 );
 
 CREATE TABLE qrtz_simple_triggers
@@ -54,11 +54,11 @@ CREATE TABLE qrtz_simple_triggers
     repeat_interval BIGINT NOT NULL,
     times_triggered BIGINT NOT NULL,
     PRIMARY KEY (sched_name,trigger_name,trigger_group),
-    FOREIGN KEY (sched_name,trigger_name,trigger_group) 
+    FOREIGN KEY (sched_name,trigger_name,trigger_group)
 		REFERENCES qrtz_triggers(sched_name,trigger_name,trigger_group) ON DELETE CASCADE
 );
 
-CREATE TABLE QRTZ_SIMPROP_TRIGGERS 
+CREATE TABLE QRTZ_SIMPROP_TRIGGERS
   (
     sched_name TEXT NOT NULL,
     trigger_name TEXT NOT NULL ,
@@ -76,7 +76,7 @@ CREATE TABLE QRTZ_SIMPROP_TRIGGERS
     bool_prop_2 BOOL NULL,
 	time_zone_id TEXT NULL,
 	PRIMARY KEY (sched_name,trigger_name,trigger_group),
-    FOREIGN KEY (sched_name,trigger_name,trigger_group) 
+    FOREIGN KEY (sched_name,trigger_name,trigger_group)
 		REFERENCES qrtz_triggers(sched_name,trigger_name,trigger_group) ON DELETE CASCADE
 );
 
@@ -88,7 +88,7 @@ CREATE TABLE qrtz_cron_triggers
     cron_expression TEXT NOT NULL,
     time_zone_id TEXT,
     PRIMARY KEY (sched_name,trigger_name,trigger_group),
-    FOREIGN KEY (sched_name,trigger_name,trigger_group) 
+    FOREIGN KEY (sched_name,trigger_name,trigger_group)
 		REFERENCES qrtz_triggers(sched_name,trigger_name,trigger_group) ON DELETE CASCADE
 );
 
@@ -99,14 +99,14 @@ CREATE TABLE qrtz_blob_triggers
     trigger_group TEXT NOT NULL,
     blob_data BYTEA NULL,
     PRIMARY KEY (sched_name,trigger_name,trigger_group),
-    FOREIGN KEY (sched_name,trigger_name,trigger_group) 
+    FOREIGN KEY (sched_name,trigger_name,trigger_group)
 		REFERENCES qrtz_triggers(sched_name,trigger_name,trigger_group) ON DELETE CASCADE
 );
 
 CREATE TABLE qrtz_calendars
   (
     sched_name TEXT NOT NULL,
-    calendar_name  TEXT NOT NULL, 
+    calendar_name  TEXT NOT NULL,
     calendar BYTEA NOT NULL,
     PRIMARY KEY (sched_name,calendar_name)
 );
@@ -114,11 +114,11 @@ CREATE TABLE qrtz_calendars
 CREATE TABLE qrtz_paused_trigger_grps
   (
     sched_name TEXT NOT NULL,
-    trigger_group TEXT NOT NULL, 
+    trigger_group TEXT NOT NULL,
     PRIMARY KEY (sched_name,trigger_group)
 );
 
-CREATE TABLE qrtz_fired_triggers 
+CREATE TABLE qrtz_fired_triggers
   (
     sched_name TEXT NOT NULL,
     entry_id TEXT NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE qrtz_fired_triggers
     PRIMARY KEY (sched_name,entry_id)
 );
 
-CREATE TABLE qrtz_scheduler_state 
+CREATE TABLE qrtz_scheduler_state
   (
     sched_name TEXT NOT NULL,
     instance_name TEXT NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE qrtz_scheduler_state
 CREATE TABLE qrtz_locks
   (
     sched_name TEXT NOT NULL,
-    lock_name  TEXT NOT NULL, 
+    lock_name  TEXT NOT NULL,
     PRIMARY KEY (sched_name,lock_name)
 );
 
@@ -163,8 +163,6 @@ create index idx_qrtz_ft_trig_inst_name on qrtz_fired_triggers(instance_name);
 create index idx_qrtz_ft_job_name on qrtz_fired_triggers(job_name);
 create index idx_qrtz_ft_job_group on qrtz_fired_triggers(job_group);
 create index idx_qrtz_ft_job_req_recovery on qrtz_fired_triggers(requests_recovery);");
-
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

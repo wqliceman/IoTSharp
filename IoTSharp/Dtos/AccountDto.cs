@@ -1,10 +1,7 @@
 ﻿using IoTSharp.Contracts;
-using IoTSharp.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Dtos
 {
@@ -18,7 +15,6 @@ namespace IoTSharp.Dtos
         /// 过期时间
         /// </summary>
         public long expires_in { get; set; }
-
 
         public string refresh_token { get; set; }
         public DateTime expires { get; set; }
@@ -65,13 +61,12 @@ namespace IoTSharp.Dtos
         /// </summary>
         [Required]
         public string UserName { get; set; }
-
     }
 
     public class RegisterDto
     {
         /// <summary>
-        /// 邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。 
+        /// 邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。
         /// </summary>
         [Required]
         public string Email { get; set; }
@@ -89,7 +84,7 @@ namespace IoTSharp.Dtos
         /// 用户名密码
         /// </summary>
         [Required]
-        [StringLength(100,  MinimumLength = 6)]
+        [StringLength(100, MinimumLength = 6)]
         public string Password { get; set; }
     }
 
@@ -126,7 +121,7 @@ namespace IoTSharp.Dtos
         /// <summary>
         /// 用户名
         /// </summary>
-        public string UserName { get;  set; }
+        public string UserName { get; set; }
         public string CustomerName { get; set; }
         public string TenantName { get; set; }
     }
@@ -146,6 +141,4 @@ namespace IoTSharp.Dtos
         /// </summary>
         public string PassNewSecond { get; set; }
     }
-
-
 }

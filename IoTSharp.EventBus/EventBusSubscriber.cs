@@ -7,18 +7,12 @@ using IoTSharp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.EventBus
 {
-
     public class EventBusSubscriber
     {
-       
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactor;
         private readonly IStorage _storage;
@@ -36,10 +30,12 @@ namespace IoTSharp.EventBus
             _caching = factory.GetCachingProvider(_hc_Caching);
             _eventBusOption = eventBusOption;
         }
+
         public async Task StoreAttributeData(PlayloadData msg)
         {
             await StoreAttributeData(msg, EventType.Attribute);
         }
+
         public async Task StoreAttributeData(PlayloadData msg, EventType _event)
         {
             try
@@ -58,7 +54,7 @@ namespace IoTSharp.EventBus
                                 _logger.LogError($"{ex.Key} {ex.Value} {Newtonsoft.Json.JsonConvert.SerializeObject(msg.MsgBody[ex.Key])}");
                             });
                             _logger.LogInformation($"更新{device.Name}({device.Id})属性数据结果{result2.ret}");
-                            if (_event!= EventType.None)
+                            if (_event != EventType.None)
                             {
                                 await RunRules(msg.DeviceId, dc.ToDynamic(), _event);
                             }
@@ -76,10 +72,9 @@ namespace IoTSharp.EventBus
             {
                 var dc = msg.ToDictionary();
                 string json = System.Text.Json.JsonSerializer.Serialize(dc);
-                _logger.LogError(ex, "StoreAttributeData:" + ex.Message+ Environment.NewLine+ json+Environment.NewLine);
+                _logger.LogError(ex, "StoreAttributeData:" + ex.Message + Environment.NewLine + json + Environment.NewLine);
             }
         }
-
 
         public async Task RunRules(Guid deviceId, object obj, EventType attribute)
         {
@@ -115,7 +110,6 @@ namespace IoTSharp.EventBus
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"处理{alarmDto.OriginatorName} 的告警{alarmDto.AlarmType} 时遇到异常:{ex.Message}");
-
             }
         }
 
@@ -134,6 +128,7 @@ namespace IoTSharp.EventBus
         {
             await RunRules(deviceId, new object(), EventType.DeleteDevice);
         }
+
         public async Task CreateDevice(Guid deviceId)
         {
             await RunRules(deviceId, new object(), EventType.CreateDevice);
@@ -162,8 +157,5 @@ namespace IoTSharp.EventBus
             msg.MsgBody.Add(devicestatus == ConnectStatus.Connected ? Constants._LastConnectDateTime : Constants._LastDisconnectDateTime, DateTime.UtcNow);
             await StoreAttributeData(msg, devicestatus == ConnectStatus.Connected ? EventType.Connected : EventType.Disconnected);
         }
-       
- 
-
     }
 }

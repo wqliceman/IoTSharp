@@ -14,7 +14,6 @@ namespace IoTSharp.Data.ClickHouse
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
         }
     }
 }

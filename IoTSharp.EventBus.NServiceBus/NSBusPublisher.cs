@@ -1,12 +1,5 @@
-﻿
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.EventBus.NServiceBus
 {

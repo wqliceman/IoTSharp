@@ -1,10 +1,5 @@
 ﻿using IoTSharp.Contracts;
-using IoTSharp.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using DataType = IoTSharp.Contracts.DataType;
 
 namespace IoTSharp.Dtos
@@ -17,8 +12,8 @@ namespace IoTSharp.Dtos
         public DataSide DataSide { get; set; }
 
         public DateTime DateTime { get; set; }
- 
-        public  object Value{ get; set; }
-        public  DataType DataType { get;   set; }
+
+        public object Value { get; set; }
+        public DataType DataType { get; set; }
     }
 }

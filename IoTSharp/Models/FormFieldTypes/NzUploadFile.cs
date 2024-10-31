@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace IoTSharp.Models.FormFieldTypes
+﻿namespace IoTSharp.Models.FormFieldTypes
 {
     public class NzUploadFile
     {

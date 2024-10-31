@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IoTSharp.Contracts;
+using IoTSharp.Controllers.Models;
+using IoTSharp.Data;
+using IoTSharp.Extensions;
+using IoTSharp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IoTSharp.Data;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Dynamic.Core;
-using IoTSharp.Controllers.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using IoTSharp.Dtos;
-using IoTSharp.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using IoTSharp.Contracts;
-using IoTSharp.Extensions;
-using System.Linq.Expressions;
+using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
 
 namespace IoTSharp.Controllers
 {
@@ -57,7 +51,7 @@ namespace IoTSharp.Controllers
         public async Task<ApiResult<PagedData<Tenant>>> GetTenant([FromQuery] QueryDto m)
         {
             var profile = this.GetUserProfile();
-            var querym = _context.Tenant.Where(c=>c.Deleted==false);
+            var querym = _context.Tenant.Where(c => c.Deleted == false);
             var data = await m.Query(querym, c => c.Name);
             return new ApiResult<PagedData<Tenant>>(ApiCode.Success, "OK", data);
         }
@@ -81,8 +75,8 @@ namespace IoTSharp.Controllers
             }
 
             return new ApiResult<Tenant>(ApiCode.Success, "OK", tenant);
-     
         }
+
         /// <summary>
         /// 修改指定的租户信息， 仅限租户管理员
         /// </summary>
@@ -111,13 +105,12 @@ namespace IoTSharp.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                if (!_context.Tenant.Any(c=>c.Id==id && c.Deleted==false))
+                if (!_context.Tenant.Any(c => c.Id == id && c.Deleted == false))
                 {
                     return new ApiResult<Tenant>(ApiCode.CantFindObject, "cant't find this object", tenant);
                 }
                 else
                 {
-
                     return new ApiResult<Tenant>(ApiCode.Exception, ex.Message, tenant);
                 }
             }
@@ -128,6 +121,7 @@ namespace IoTSharp.Controllers
 
             return new ApiResult<Tenant>(ApiCode.Success, "Ok", tenant);
         }
+
         /// <summary>
         /// 新增租户， 仅限系统管理员
         /// </summary>
@@ -149,10 +143,10 @@ namespace IoTSharp.Controllers
             }
             catch (Exception ex)
             {
-
                 return new ApiResult<Tenant>(ApiCode.Exception, ex.Message, tenant);
             }
         }
+
         /// <summary>
         /// 删除租户，仅限系统用户
         /// </summary>
@@ -182,7 +176,6 @@ namespace IoTSharp.Controllers
             catch (Exception ex)
             {
                 return new ApiResult<Tenant>(ApiCode.Exception, ex.Message, tenant);
-            
             }
         }
     }

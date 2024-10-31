@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShardingCore.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ShardingCore.Extensions;
 
 namespace IoTSharp.Controllers
 {
@@ -89,7 +89,7 @@ namespace IoTSharp.Controllers
             {
                 SubscriptionEvent se = new()
                 {
-                    Creator =  User.GetUserId(),
+                    Creator = User.GetUserId(),
                     EventName = m.EventName,
                     EventDesc = m.EventDesc,
                     EventNameSpace = m.EventNameSpace,
@@ -99,7 +99,7 @@ namespace IoTSharp.Controllers
                     CreateDateTime = DateTime.UtcNow,
                     EventStatus = 1
                 };
-                _context.JustFill(this,se);
+                _context.JustFill(this, se);
                 _context.SubscriptionEvents.Add(se);
                 await this._context.SaveChangesAsync();
                 return new ApiResult<bool>(ApiCode.Success, "OK", true);

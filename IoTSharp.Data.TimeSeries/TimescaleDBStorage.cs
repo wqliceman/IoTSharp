@@ -1,27 +1,25 @@
-﻿using Castle.Core.Logging;
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Storage
 {
     public class TimescaleDBStorage : IStorage
     {
-
         private readonly IServiceScopeFactory _scopeFactor;
         private readonly Microsoft.Extensions.Logging.ILogger _logger;
+
         public TimescaleDBStorage(ILogger<TimescaleDBStorage> logger, IServiceScopeFactory scopeFactor
            , IOptions<AppSettings> options)
         {
             _scopeFactor = scopeFactor;
             _logger = logger;
         }
+
         public Task<bool> CheckTelemetryStorage()
         {
             using var scope = _scopeFactor.CreateScope();
@@ -110,7 +108,6 @@ namespace IoTSharp.Storage
             return (result, telemetries);
         }
 
-
         private async Task<List<TelemetryDataDto>> AggregateTelemetryAsync(Guid deviceId, string key, DateTime begin, DateTime end, TimeSpan every, Aggregate aggregate)
         {
             using var scope = _scopeFactor.CreateScope();
@@ -128,10 +125,10 @@ namespace IoTSharp.Storage
                 case DataType.Double:
                 case DataType.Long:
                     return await AggregateAsync(context!, deviceId, key, dataType, begin, end, every, aggregate);
+
                 default:
                     return await GetAllData(context!, deviceId, key, begin, end);
             }
-
         }
 
         private static async Task<List<TelemetryDataDto>> GetAllData(ApplicationDbContext context, Guid deviceId, string key, DateTime begin, DateTime end)
@@ -169,7 +166,6 @@ namespace IoTSharp.Storage
             });
             return result;
         }
-
 
         private string GetFiledName(DataType dataType)
         {

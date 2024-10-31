@@ -11,7 +11,8 @@ namespace IoTSharp.Contracts
         public SslProtocols SslProtocol { get; set; } = SslProtocols.Tls12;
         public bool PersistRetainedMessages { get; set; }
 
-        X509Certificate2 _CACertificate;
+        private X509Certificate2 _CACertificate;
+
         public X509Certificate2 CACertificate
         {
             get
@@ -24,12 +25,11 @@ namespace IoTSharp.Contracts
                     }
                 }
                 return _CACertificate;
-
-
             }
         }
 
-        X509Certificate2 _BrokerCertificate;
+        private X509Certificate2 _BrokerCertificate;
+
         public X509Certificate2 BrokerCertificate
         {
             get
@@ -44,6 +44,7 @@ namespace IoTSharp.Contracts
                 return _BrokerCertificate;
             }
         }
+
         public string CACertificateFile { get; set; } = "security/ca.crt";
         public string CAPrivateKeyFile { get; set; } = "security/ca.key";
         public string CertificateFile { get; set; } = "security/server.crt";

@@ -61,10 +61,10 @@ namespace IoTSharp.Extensions.X509
                 request.CertificateExtensions.Add(
                     new X509BasicConstraintsExtension(false, false, 0, false));
                 request.CertificateExtensions.Add(
-                    new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.KeyEncipherment |  X509KeyUsageFlags.DataEncipherment   , false));
+                    new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.KeyEncipherment | X509KeyUsageFlags.DataEncipherment, false));
                 request.CertificateExtensions.Add(
                     new X509EnhancedKeyUsageExtension(
-                        new OidCollection { new Oid("1.3.6.1.5.5.7.3.1"),new Oid("1.3.6.1.5.5.7.3.2") }, false));
+                        new OidCollection { new Oid("1.3.6.1.5.5.7.3.1"), new Oid("1.3.6.1.5.5.7.3.2") }, false));
 
                 if (altNames != null)
                 {
@@ -156,8 +156,9 @@ namespace IoTSharp.Extensions.X509
             // Send this to the CA you're requesting to sign your certificate.
             return request.CreateSigningRequest();
         }
+
         /// <summary>
-        ///  如果遇到 “安全包中没有可用的凭证” ， 使用 这个转换一次。 
+        ///  如果遇到 “安全包中没有可用的凭证” ， 使用 这个转换一次。
         /// </summary>
         /// <param name="sslCert"></param>
         /// <seealso cref="https://github.com/dotnet/runtime/issues/23749#issuecomment-747407051"/>

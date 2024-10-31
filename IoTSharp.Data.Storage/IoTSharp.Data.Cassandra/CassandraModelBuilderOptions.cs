@@ -14,7 +14,6 @@ namespace IoTSharp.Data.Cassandra
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
         }
     }
 }

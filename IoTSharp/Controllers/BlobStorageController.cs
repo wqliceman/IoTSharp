@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client.Extensions.Msal;
 using MQTTnet.Client;
 using MQTTnet.Server;
 using Storage.Net.Blobs;
@@ -18,9 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 
 namespace IoTSharp.Controllers
 {
@@ -124,7 +121,6 @@ namespace IoTSharp.Controllers
                 {
                     result.Data.Add(formFile.FileName, "空文件");
                 }
-
             }
             return result;
         }

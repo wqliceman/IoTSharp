@@ -1,15 +1,9 @@
 ﻿using IoTSharp.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data.Configurations
 {
-
     public class DataStorageConfiguration : IEntityTypeConfiguration<DataStorage>
     {
         public void Configure(EntityTypeBuilder<DataStorage> builder)

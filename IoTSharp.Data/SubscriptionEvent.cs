@@ -7,6 +7,7 @@ namespace IoTSharp.Data
     {
         [Key]
         public Guid EventId { get; set; }
+
         public string EventName { get; set; }
         public string EventDesc { get; set; }
         public string EventNameSpace { get; set; }

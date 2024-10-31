@@ -1,26 +1,19 @@
 ﻿using IoTSharp.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
 
 namespace IoTSharp.Extensions
 {
     public static class FlowExtension
     {
-
         public static void SaveFlowResult(this ApplicationDbContext _context, Guid DeviceId, Guid RuleId, List<FlowOperation> result)
         {
-
             if (_context.DeviceRules.Any(c =>
                                 c.Device.Id == DeviceId && c.FlowRule.RuleId == RuleId && c.EnableTrace == 1))
             {
                 if (result.Count > 0)
                 {
-
                     var flowRule = _context.FlowRules.SingleOrDefault(c => c.RuleId == RuleId);
 
                     var flows = _context.Flows.Where(c => c.FlowRule == flowRule).ToList();
@@ -47,10 +40,7 @@ namespace IoTSharp.Extensions
                     }).ToArray();
                     _context.FlowOperations.AddRange(list);
                     _context.SaveChanges();
-
                 }
-
-
             }
             else
             {
@@ -58,7 +48,6 @@ namespace IoTSharp.Extensions
                 {
                     if (result.Count > 0)
                     {
-
                         var flowRule = _context.FlowRules.SingleOrDefault(c => c.RuleId == RuleId);
 
                         var flows = _context.Flows.Where(c => c.FlowRule == flowRule).ToList();
@@ -85,12 +74,8 @@ namespace IoTSharp.Extensions
                         }).ToArray();
                         _context.FlowOperations.AddRange(list);
                         _context.SaveChanges();
-
                     }
-
                 }
-
-
             }
         }
     }

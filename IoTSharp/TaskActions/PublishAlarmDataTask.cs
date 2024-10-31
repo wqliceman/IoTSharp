@@ -1,8 +1,5 @@
-﻿using IoTSharp.EventBus;
-using IoTSharp.Contracts;
-using IoTSharp.Data;
-using IoTSharp.Extensions;
-using IoTSharp.TaskActions;
+﻿using IoTSharp.Contracts;
+using IoTSharp.EventBus;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
@@ -23,7 +20,7 @@ namespace IoTSharp.TaskActions
 
         public override Task<TaskActionOutput> ExecuteAsync(TaskActionInput param)
         {
-            var result = new TaskActionOutput() { DynamicOutput = param.DynamicInput, ExecutionStatus = true, ExecutionInfo = ""};
+            var result = new TaskActionOutput() { DynamicOutput = param.DynamicInput, ExecutionStatus = true, ExecutionInfo = "" };
             try
             {
                 var dto = JsonConvert.DeserializeObject<CreateAlarmDto>(param.Input);

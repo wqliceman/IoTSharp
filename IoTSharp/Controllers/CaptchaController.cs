@@ -1,8 +1,6 @@
 ﻿using Castle.Components.DictionaryAdapter;
 using EasyCaching.Core;
 using IoTSharp.Contracts;
-using IoTSharp.Data;
-using IoTSharp.Dtos;
 using IoTSharp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
@@ -24,12 +21,13 @@ namespace IoTSharp.Controllers
     {
         private readonly IEasyCachingProvider _caching;
         private readonly IWebHostEnvironment _hostingEnvironment;
-  
+
         public CaptchaController(IWebHostEnvironment hostingEnvironment, IEasyCachingProvider caching)
         {
             _hostingEnvironment = hostingEnvironment;
             _caching = caching;
         }
+
         /// <summary>
         /// 生成一个图形认证
         /// </summary>
@@ -53,8 +51,6 @@ namespace IoTSharp.Controllers
             return new ApiResult<ModelCaptcha>(ApiCode.Success, "OK", data);
         }
 
-
-
         /// <summary>
         /// 生成一个图形认证
         /// </summary>
@@ -62,11 +58,9 @@ namespace IoTSharp.Controllers
         [HttpGet, AllowAnonymous]
         public FileStreamResult Imgs()
         {
-             var orginfile = typeof(CaptchaController).Assembly.GetManifestResourceStream($"IoTSharp.Resources.slide{RandomNumberGenerator.GetInt32(1, 15)}.jpg");
+            var orginfile = typeof(CaptchaController).Assembly.GetManifestResourceStream($"IoTSharp.Resources.slide{RandomNumberGenerator.GetInt32(1, 15)}.jpg");
             return File(orginfile, "image/jpeg");
         }
-
-
 
         /// <summary>
         /// 校验图形认证
@@ -100,7 +94,7 @@ namespace IoTSharp.Controllers
         private ModelCaptcha CreateImage()
         {
             using var buzzlefile = typeof(CaptchaController).Assembly.GetManifestResourceStream("IoTSharp.Resources.buzzle-template.png");
-            using var orginfile =  typeof(CaptchaController).Assembly.GetManifestResourceStream($"IoTSharp.Resources.slide{RandomNumberGenerator.GetInt32(1, 15)}.jpg");
+            using var orginfile = typeof(CaptchaController).Assembly.GetManifestResourceStream($"IoTSharp.Resources.slide{RandomNumberGenerator.GetInt32(1, 15)}.jpg");
             using var buzzlefilestream = new SKManagedStream(buzzlefile);
             using var orginfilestream = new SKManagedStream(orginfile);
             using var buzzle = SKBitmap.Decode(buzzlefilestream);

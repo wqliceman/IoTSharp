@@ -1,5 +1,4 @@
-﻿using System;
-using ClickHouse.EntityFrameworkCore.Extensions;
+﻿using ClickHouse.EntityFrameworkCore.Extensions;
 using HealthChecks.Clickhouse.DependencyInjection;
 using IoTSharp.Data;
 using IoTSharp.Data.ClickHouse;

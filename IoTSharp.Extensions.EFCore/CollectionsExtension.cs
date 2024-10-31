@@ -1,9 +1,7 @@
-﻿
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
     public static class CollectionsExtension
     {
-
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             HashSet<TKey> seenKeys = new HashSet<TKey>();

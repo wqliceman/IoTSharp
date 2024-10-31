@@ -1,5 +1,4 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,9 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -23,13 +19,13 @@ namespace IoTSharp.Extensions
     {
         #region from  https://github.com/LazyMode/StringEx/blob/master/StringEx.cs
 
-
 #pragma warning disable 1591
 
         public static StringComparison GlobalDefaultComparison { get; set; } = StringComparison.Ordinal;
 
         [ThreadStatic]
         private static StringComparison? _DefaultComparison;
+
         public static StringComparison DefaultComparison
         {
             get { return _DefaultComparison ?? GlobalDefaultComparison; }
@@ -56,6 +52,7 @@ namespace IoTSharp.Extensions
         }
 
 #if !PCL
+
         public static string IsInterned(this string value)
         {
             if (value == null)
@@ -71,6 +68,7 @@ namespace IoTSharp.Extensions
 
             return string.Intern(value);
         }
+
 #endif
 
 #if UNSAFE
@@ -114,6 +112,7 @@ namespace IoTSharp.Extensions
         return value;
     }
 #else
+
         public static string ToLowerForASCII(this string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -145,9 +144,10 @@ namespace IoTSharp.Extensions
             }
             return sb.ToString();
         }
+
 #endif
 
-        #endregion
+        #endregion basic String methods
 
         #region comparing
 
@@ -155,10 +155,11 @@ namespace IoTSharp.Extensions
 
         public static bool Is(this string a, string b)
             => string.Equals(a, b, DefaultComparison);
+
         public static bool Is(this string a, string b, StringComparison comparisonType)
             => string.Equals(a, b, comparisonType);
 
-        #endregion
+        #endregion Is
 
         #region BeginWith
 
@@ -167,11 +168,13 @@ namespace IoTSharp.Extensions
             if (s.IsNullOrEmpty()) return false;
             return s[0] == c;
         }
+
         public static bool BeginWithAny(this string s, IEnumerable<char> chars)
         {
             if (s.IsNullOrEmpty()) return false;
             return chars.Contains(s[0]);
         }
+
         public static bool BeginWithAny(this string s, params char[] chars)
             => s.BeginWithAny(chars.AsEnumerable());
 
@@ -181,22 +184,26 @@ namespace IoTSharp.Extensions
 
             return a.StartsWith(b, DefaultComparison);
         }
+
         public static bool BeginWith(this string a, string b, StringComparison comparisonType)
         {
             if (a == null || b == null) return false;
 
             return a.StartsWith(b, comparisonType);
         }
+
 #if !PCL
+
         public static bool BeginWith(this string a, string b, bool ignoreCase, CultureInfo culture)
         {
             if (a == null || b == null) return false;
 
             return a.StartsWith(b, ignoreCase, culture);
         }
+
 #endif
 
-        #endregion
+        #endregion BeginWith
 
         #region FinishWith
 
@@ -205,11 +212,13 @@ namespace IoTSharp.Extensions
             if (s.IsNullOrEmpty()) return false;
             return s.Last() == c;
         }
+
         public static bool FinishWithAny(this string s, IEnumerable<char> chars)
         {
             if (s.IsNullOrEmpty()) return false;
             return chars.Contains(s.Last());
         }
+
         public static bool FinishWithAny(this string s, params char[] chars)
             => s.FinishWithAny(chars.AsEnumerable());
 
@@ -219,24 +228,28 @@ namespace IoTSharp.Extensions
 
             return a.EndsWith(b, DefaultComparison);
         }
+
         public static bool FinishWith(this string a, string b, StringComparison comparisonType)
         {
             if (a == null || b == null) return false;
 
             return a.EndsWith(b, comparisonType);
         }
+
 #if !PCL
+
         public static bool FinishWith(this string a, string b, bool ignoreCase, CultureInfo culture)
         {
             if (a == null || b == null) return false;
 
             return a.EndsWith(b, ignoreCase, culture);
         }
+
 #endif
 
-        #endregion
+        #endregion FinishWith
 
-        #endregion
+        #endregion comparing
 
         #region ToLines
 
@@ -246,6 +259,7 @@ namespace IoTSharp.Extensions
             while ((line = reader.ReadLine()) != null)
                 yield return line;
         }
+
         public static IEnumerable<string> NonEmptyLines(this TextReader reader)
         {
             string line;
@@ -255,6 +269,7 @@ namespace IoTSharp.Extensions
                 yield return line;
             }
         }
+
         public static IEnumerable<string> NonWhiteSpaceLines(this TextReader reader)
         {
             string line;
@@ -265,7 +280,7 @@ namespace IoTSharp.Extensions
             }
         }
 
-        #endregion
+        #endregion ToLines
 
         #region others
 
@@ -280,6 +295,7 @@ namespace IoTSharp.Extensions
         "〖〗",
         "【】",
     }.Select(s => s.ToCharArray()).ToArray();
+
         public static string Enquote(this string value)
         {
             if (value == null)
@@ -321,16 +337,16 @@ namespace IoTSharp.Extensions
 
             return sb.ToString();
         }
+
         public static string ReplaceEx(this string value, string find, string rep)
             => value.Replace(find, rep, DefaultComparison);
 
-        #endregion
+        #endregion others
 
-        #endregion https://github.com/LazyMode/StringEx/blob/master/StringEx.cs
-
+        #endregion from  https://github.com/LazyMode/StringEx/blob/master/StringEx.cs
 
         /// <summary>
-        /// 把 \0 也剔除掉。 
+        /// 把 \0 也剔除掉。
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
@@ -343,6 +359,7 @@ namespace IoTSharp.Extensions
         {
             return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
+
         public static string Left(this string str, int length)
         {
             str = (str ?? string.Empty);
@@ -361,39 +378,36 @@ namespace IoTSharp.Extensions
         {
             return str.Skip(str.Length - length).Take(length).ToArray();
         }
+
         public static char[] Left(this char[] str, int length)
         {
             return str.Take(length).ToArray();
         }
 
-
-
         public static byte[] Right(this byte[] str, int length)
         {
             return str.Skip(str.Length - length).Take(length).ToArray();
         }
+
         public static byte[] Left(this byte[] str, int length)
         {
             return str.Take(length).ToArray();
         }
+
         public static byte[] ToBytes(this string s)
         {
             return System.Text.Encoding.Default.GetBytes(s);
         }
+
         public static byte[] ToBytes(this string s, Encoding encoding)
         {
             return encoding?.GetBytes(s);
         }
 
-
         #region https://github.com/Coldairarrow/EFCore.Sharding/tree/master/src/EFCore.Sharding.Tests/Util
-
-
 
         private static BindingFlags _bindingFlags { get; }
            = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
-
-      
 
         /// <summary>
         /// 判断是否为Null或者空
@@ -416,7 +430,7 @@ namespace IoTSharp.Extensions
         /// </summary>
         /// <param name="obj">需要序列化的对象</param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj)  where T:class
+        public static string ToJson<T>(this T obj) where T : class
         {
             return JsonConvert.SerializeObject(obj);
         }
@@ -463,7 +477,7 @@ namespace IoTSharp.Extensions
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="obj">对象</param>
         /// <returns></returns>
-        public static string ToXmlStr<T>(this T obj) where T:class
+        public static string ToXmlStr<T>(this T obj) where T : class
         {
             var jsonStr = obj.ToJson<T>();
             var xmlDoc = JsonConvert.DeserializeXmlNode(jsonStr);
@@ -479,7 +493,7 @@ namespace IoTSharp.Extensions
         /// <param name="obj">对象</param>
         /// <param name="rootNodeName">根节点名(建议设为xml)</param>
         /// <returns></returns>
-        public static string ToXmlStr<T>(this T obj, string rootNodeName) where T:class
+        public static string ToXmlStr<T>(this T obj, string rootNodeName) where T : class
         {
             var jsonStr = obj.ToJson();
             var xmlDoc = JsonConvert.DeserializeXmlNode(jsonStr, rootNodeName);
@@ -505,7 +519,7 @@ namespace IoTSharp.Extensions
         /// <param name="obj">对象</param>
         /// <param name="propertyName">属性名</param>
         /// <returns></returns>
-        public static V GetPropertyValue<T,V>(this T obj, string propertyName) where T:class
+        public static V GetPropertyValue<T, V>(this T obj, string propertyName) where T : class
         {
             return (V)obj.GetType().GetProperty(propertyName, _bindingFlags).GetValue(obj);
         }
@@ -599,6 +613,7 @@ namespace IoTSharp.Extensions
 
             return resObj;
         }
+
         /// <summary>
         /// string转int
         /// </summary>
@@ -656,8 +671,6 @@ namespace IoTSharp.Extensions
         {
             return Convert.ToDouble(str);
         }
-
-
 
         /// <summary>
         /// 将16进制字符串转为Byte数组
@@ -894,6 +907,7 @@ namespace IoTSharp.Extensions
             else
                 return false;
         }
-        #endregion
+
+        #endregion https://github.com/Coldairarrow/EFCore.Sharding/tree/master/src/EFCore.Sharding.Tests/Util
     }
 }

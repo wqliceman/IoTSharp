@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Customer = IoTSharp.Data.Customer;
 
@@ -61,16 +60,14 @@ namespace IoTSharp.Controllers
             var profile = this.GetUserProfile();
             if (m.tenantId != Guid.Empty)
             {
-                var querym = _context.Customer.Include(c=>c.Tenant).Where(c => !c.Deleted && c.Tenant.Id==m.tenantId);
+                var querym = _context.Customer.Include(c => c.Tenant).Where(c => !c.Deleted && c.Tenant.Id == m.tenantId);
                 var data = await m.Query(querym, c => c.Name);
                 return new ApiResult<PagedData<Customer>>(ApiCode.Success, "OK", data);
             }
             else
             {
-
-                return new ApiResult<PagedData<Customer>>(ApiCode.NotFoundCustomer, "没有指定客户ID",new PagedData<Customer> ());
+                return new ApiResult<PagedData<Customer>>(ApiCode.NotFoundCustomer, "没有指定客户ID", new PagedData<Customer>());
             }
-           
         }
 
         /// <summary>
@@ -112,7 +109,7 @@ namespace IoTSharp.Controllers
             {
                 return new ApiResult<Customer>(ApiCode.InValidData, "InValidData", customer);
             }
-            if(customer.TenantId!= Guid.Empty)
+            if (customer.TenantId != Guid.Empty)
             {
                 customer.Tenant = _context.Tenant.Find(customer.TenantId);
             }

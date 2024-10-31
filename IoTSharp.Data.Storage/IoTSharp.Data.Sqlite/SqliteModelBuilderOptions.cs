@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace IoTSharp.Data.Sqlite
 {

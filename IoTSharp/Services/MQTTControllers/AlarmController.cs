@@ -1,16 +1,10 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using IoTSharp.Dtos;
-using IoTSharp.Extensions;
-using IoTSharp.FlowRuleEngine;
+using IoTSharp.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.AspNetCore.Routing;
-using System;
 using System.Threading.Tasks;
 
 namespace IoTSharp.Services.MQTTControllers
@@ -31,7 +25,6 @@ namespace IoTSharp.Services.MQTTControllers
             _logger = logger;
             _scopeFactor = scopeFactor;
             _queue = queue;
-
         }
 
         public string devname
@@ -45,7 +38,7 @@ namespace IoTSharp.Services.MQTTControllers
                 _devname = value;
                 var _dev = GetSessionItem<Device>();
                 device = _dev.JudgeOrCreateNewDevice(devname, _scopeFactor, _logger);
-                _queue.PublishActive(_dev.Id,  ActivityStatus.Activity);
+                _queue.PublishActive(_dev.Id, ActivityStatus.Activity);
             }
         }
 

@@ -1,9 +1,8 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
+﻿using EasyCaching.Core;
 using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Data.Extensions;
-using IoTSharp.Extensions;
+using IoTSharp.EventBus;
 using IoTSharp.FlowRuleEngine;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,6 @@ using MQTTnet.Server;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace IoTSharp.Services
 {
@@ -168,16 +166,16 @@ namespace IoTSharp.Services
                     }
                     else
                     {
-                        string _thumbprint = string.Empty ;
+                        string _thumbprint = string.Empty;
                         if (_settings.MqttBroker.EnableTls)
                         {
                             _thumbprint = e.ClientCertificate?.Thumbprint;
                         }
-                            _logger.LogInformation($"ClientId={obj.ClientId},Endpoint={obj.Endpoint},Username={obj.UserName}，Password={obj.Password}");
+                        _logger.LogInformation($"ClientId={obj.ClientId},Endpoint={obj.Endpoint},Username={obj.UserName}，Password={obj.Password}");
                         var mcr = _dbContextcv.DeviceIdentities.Include(d => d.Device).FirstOrDefault(mc =>
                                               (mc.IdentityType == IdentityType.AccessToken && mc.IdentityId == obj.UserName) ||
-                                             ( mc.IdentityType == IdentityType.X509Certificate &&  mc.IdentityId == _thumbprint ) ||
-                                             ( mc.IdentityType == IdentityType.DevicePassword && mc.IdentityId == obj.UserName && mc.IdentityValue == obj.Password)
+                                             (mc.IdentityType == IdentityType.X509Certificate && mc.IdentityId == _thumbprint) ||
+                                             (mc.IdentityType == IdentityType.DevicePassword && mc.IdentityId == obj.UserName && mc.IdentityValue == obj.Password)
                                              );
                         if (mcr != null)
                         {
@@ -195,9 +193,9 @@ namespace IoTSharp.Services
                                 e.ReasonCode = MQTTnet.Protocol.MqttConnectReasonCode.ServerUnavailable;
                             }
                         }
-                        else if (_dbContextcv.AuthorizedKeys.Any(ak => ak.AuthToken == obj.Password && ak.Deleted==false))
+                        else if (_dbContextcv.AuthorizedKeys.Any(ak => ak.AuthToken == obj.Password && ak.Deleted == false))
                         {
-                            var ak = _dbContextcv.AuthorizedKeys.Include(ak => ak.Customer).Include(ak => ak.Tenant).Include(ak => ak.Devices).FirstOrDefault(ak => ak.AuthToken == obj.Password && ak.Deleted==false);
+                            var ak = _dbContextcv.AuthorizedKeys.Include(ak => ak.Customer).Include(ak => ak.Tenant).Include(ak => ak.Devices).FirstOrDefault(ak => ak.AuthToken == obj.Password && ak.Deleted == false);
                             if (ak != null && !ak.Devices.Any(dev => dev.Name == obj.UserName))
                             {
                                 var devvalue = new Device() { Name = obj.UserName, DeviceType = DeviceType.Device, Timeout = 300 };
@@ -207,7 +205,7 @@ namespace IoTSharp.Services
                                 ak.Devices.Add(devvalue);
                                 _dbContextcv.AfterCreateDevice(devvalue, obj.UserName, obj.Password);
                                 _dbContextcv.SaveChanges();
-                                _queue.PublishConnect(devvalue.Id,  ConnectStatus.Connected);
+                                _queue.PublishConnect(devvalue.Id, ConnectStatus.Connected);
                             }
                             var mcp = _dbContextcv.DeviceIdentities.Include(d => d.Device).FirstOrDefault(mc => mc.IdentityType == IdentityType.DevicePassword && mc.IdentityId == obj.UserName && mc.IdentityValue == obj.Password);
                             if (mcp != null)
@@ -223,17 +221,17 @@ namespace IoTSharp.Services
                                 _logger.LogInformation($"Bad username or  password/AuthToken {obj.UserName},connection {obj.Endpoint} refused");
                             }
                         }
-                        else if (_dbContextcv.Produces.Any(ak =>  obj.UserName.StartsWith( ak.Name+"_")  &&   ak.ProduceToken == obj.Password && ak.Deleted == false))
+                        else if (_dbContextcv.Produces.Any(ak => obj.UserName.StartsWith(ak.Name + "_") && ak.ProduceToken == obj.Password && ak.Deleted == false))
                         {
-                            var ak = _dbContextcv.Produces.Include(ak => ak.Customer).Include(ak => ak.Tenant).Include(ak => ak.Devices).FirstOrDefault(ak =>  ak.ProduceToken == obj.Password && ak.Deleted == false);
-                            if (ak!=null &&   ak.Devices.Any(d => d.Name == obj.UserName && d.Deleted == false))
+                            var ak = _dbContextcv.Produces.Include(ak => ak.Customer).Include(ak => ak.Tenant).Include(ak => ak.Devices).FirstOrDefault(ak => ak.ProduceToken == obj.Password && ak.Deleted == false);
+                            if (ak != null && ak.Devices.Any(d => d.Name == obj.UserName && d.Deleted == false))
                             {
                                 var devvalue = new Device() { Name = obj.UserName, DeviceType = ak.DefaultDeviceType, Timeout = ak.DefaultTimeout };
                                 devvalue.Tenant = ak.Tenant;
                                 devvalue.Customer = ak.Customer;
                                 _dbContextcv.Device.Add(devvalue);
                                 ak.Devices.Add(devvalue);
-                                _dbContextcv.AfterCreateDevice(devvalue,ak.Id);
+                                _dbContextcv.AfterCreateDevice(devvalue, ak.Id);
                                 _dbContextcv.SaveChanges();
                                 _queue.PublishConnect(devvalue.Id, ConnectStatus.Connected);
                             }

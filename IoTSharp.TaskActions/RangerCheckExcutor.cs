@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace IoTSharp.TaskActions
 {
     [DisplayName("用于增加范围属性的执行器")]
-    public class   RangerCheckExcutor : TaskAction
+    public class RangerCheckExcutor : TaskAction
     {
         public override Task<TaskActionOutput> ExecuteAsync(TaskActionInput _input)
         {
@@ -54,10 +50,9 @@ namespace IoTSharp.TaskActions
             }
             return (cnt % 2 > 0) ? true : false;
         }
+
         private class ModelExecutorConfig
         {
-         
-
             public string PointX { get; set; }
 
             public string PointY { get; set; }
@@ -70,6 +65,5 @@ namespace IoTSharp.TaskActions
             public double X { get; set; }
             public double Y { get; set; }
         }
-
     }
 }

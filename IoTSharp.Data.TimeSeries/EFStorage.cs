@@ -1,15 +1,10 @@
 ﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using  Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace IoTSharp.Storage
 {
@@ -18,7 +13,7 @@ namespace IoTSharp.Storage
         private readonly AppSettings _appSettings;
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactor;
-     
+
         public EFStorage(ILogger<EFStorage> logger, IServiceScopeFactory scopeFactor
            , IOptions<AppSettings> options
             )
@@ -28,9 +23,9 @@ namespace IoTSharp.Storage
             _scopeFactor = scopeFactor;
         }
 
-        public  virtual Task<bool>  CheckTelemetryStorage()
+        public virtual Task<bool> CheckTelemetryStorage()
         {
-           return Task.FromResult( true );
+            return Task.FromResult(true);
         }
 
         public Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId)
@@ -59,21 +54,21 @@ namespace IoTSharp.Storage
             using var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
             var lst = new List<TelemetryDataDto>();
             var kv = from t in context?.TelemetryData
-                     where t.DeviceId == deviceId &&  t.DateTime >= begin && t.DateTime < end
-                     select new TelemetryDataDto() { DateTime = t.DateTime, KeyName = t.KeyName, DataType=t.Type,  Value = t.ToObject() };
-            if (!string.IsNullOrEmpty(keys) )
+                     where t.DeviceId == deviceId && t.DateTime >= begin && t.DateTime < end
+                     select new TelemetryDataDto() { DateTime = t.DateTime, KeyName = t.KeyName, DataType = t.Type, Value = t.ToObject() };
+            if (!string.IsNullOrEmpty(keys))
             {
                 var kfk = from t in kv where keys.Split(',', ' ', ';').Contains(t.KeyName) select t;
-                lst=await kfk.AsNoTracking().ToListAsync();
+                lst = await kfk.AsNoTracking().ToListAsync();
             }
             else
             {
                 lst = await kv.AsNoTracking().ToListAsync();
             }
-           return AggregateDataHelpers.AggregateData(lst, begin, end, every, aggregate);
+            return AggregateDataHelpers.AggregateData(lst, begin, end, every, aggregate);
         }
 
-        public virtual async Task<(bool result, List<TelemetryData> telemetries)>  StoreTelemetryAsync(PlayloadData msg)
+        public virtual async Task<(bool result, List<TelemetryData> telemetries)> StoreTelemetryAsync(PlayloadData msg)
         {
             bool result = false;
             List<TelemetryData> telemetries = new List<TelemetryData>();
@@ -87,7 +82,7 @@ namespace IoTSharp.Storage
                         {
                             if (kp.Value != null)
                             {
-                                var tdata = new TelemetryData() { DateTime = msg.ts,  DeviceId = msg.DeviceId, KeyName = kp.Key };
+                                var tdata = new TelemetryData() { DateTime = msg.ts, DeviceId = msg.DeviceId, KeyName = kp.Key };
                                 tdata.FillKVToMe(kp);
                                 _dbContext.Set<TelemetryData>().Add(tdata);
                                 telemetries.Add(tdata);
@@ -108,7 +103,5 @@ namespace IoTSharp.Storage
             }
             return (result, telemetries);
         }
-
-
     }
 }

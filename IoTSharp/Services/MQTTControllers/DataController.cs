@@ -1,20 +1,19 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
+﻿using EasyCaching.Core;
 using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Data.Extensions;
+using IoTSharp.EventBus;
 using IoTSharp.Extensions;
 using IoTSharp.FlowRuleEngine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MQTTnet;
 using MQTTnet.AspNetCore.Routing;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MQTTnet;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json;
 
 namespace IoTSharp.Services.MQTTControllers
 {
@@ -69,6 +68,7 @@ namespace IoTSharp.Services.MQTTControllers
                 }
             }
         }
+
         [MqttRoute("binary")]
         public async Task BinaryDataProcessing()
         {
@@ -85,7 +85,7 @@ namespace IoTSharp.Services.MQTTControllers
             , TimeSpan.FromSeconds(_settings.RuleCachingExpiration));
             if (rules.HasValue)
             {
-                var obj =   Message.PayloadSegment.ToArray();
+                var obj = Message.PayloadSegment.ToArray();
                 rules.Value.ToList().ForEach(async g =>
                 {
                     _logger.LogInformation($"{ClientId}的数据{Message.Topic}通过规则链{g}进行处理。");
@@ -97,6 +97,7 @@ namespace IoTSharp.Services.MQTTControllers
                 _logger.LogInformation($"{ClientId}的数据{Message.Topic}不符合规范， 也无相关规则链处理。");
             }
         }
+
         [MqttRoute("json")]
         public async Task JsonDataProcessing()
         {

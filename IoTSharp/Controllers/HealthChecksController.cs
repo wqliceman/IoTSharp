@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EasyCaching.Core;
+using HealthChecks.UI.Data;
+using IoTSharp.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using IoTSharp.Contracts;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Microsoft.Extensions.Options;
-using EasyCaching.Core;
-using HealthChecks.UI.Data;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IoTSharp.Controllers
 {
@@ -40,6 +39,7 @@ namespace IoTSharp.Controllers
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
+
         ///<summary>
         /// 获取相关服务的健康检查信息
         /// </summary>
@@ -55,8 +55,6 @@ namespace IoTSharp.Controllers
                   using (var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>())
                   {
                       var healthChecks = await db.Configurations.ToListAsync();
-
-
 
                       foreach (var item in healthChecks.OrderBy(h => h.Id))
                       {
@@ -76,7 +74,6 @@ namespace IoTSharp.Controllers
                               healthChecksExecutions.Add(execution);
                           }
                       }
-
                   }
                   return healthChecksExecutions;
               }, TimeSpan.FromMinutes(10));

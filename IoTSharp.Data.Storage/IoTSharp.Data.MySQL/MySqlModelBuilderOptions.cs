@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data.MySQL
 {
@@ -12,7 +8,6 @@ namespace IoTSharp.Data.MySQL
     {
         public MySqlModelBuilderOptions()
         {
-
         }
 
         public IInfrastructure<IServiceProvider> Infrastructure { get; set; }
@@ -27,7 +22,6 @@ namespace IoTSharp.Data.MySQL
             modelBuilder.Entity<TelemetryData>()
             .Property(b => b.Value_DateTime)
             .HasColumnType("timestamp");
-
 
             modelBuilder.Entity<TelemetryLatest>()
             .Property(b => b.DateTime)
@@ -49,20 +43,20 @@ namespace IoTSharp.Data.MySQL
 
             if (sv.Supports.Json)
             {
-                    modelBuilder.Entity<TelemetryData>()
-                    .Property(b => b.Value_Json)
-                    .HasColumnType("JSON");
-                    modelBuilder.Entity<TelemetryData>()
-                    .Property(b => b.Value_Json)
-                    .HasColumnType("JSON");
+                modelBuilder.Entity<TelemetryData>()
+                .Property(b => b.Value_Json)
+                .HasColumnType("JSON");
+                modelBuilder.Entity<TelemetryData>()
+                .Property(b => b.Value_Json)
+                .HasColumnType("JSON");
 
-                    modelBuilder.Entity<AttributeLatest>()
-                    .Property(b => b.Value_Json)
-                    .HasColumnType("JSON");
+                modelBuilder.Entity<AttributeLatest>()
+                .Property(b => b.Value_Json)
+                .HasColumnType("JSON");
 
-                    modelBuilder.Entity<TelemetryLatest>()
-                    .Property(b => b.Value_Json)
-                    .HasColumnType("JSON");
+                modelBuilder.Entity<TelemetryLatest>()
+                .Property(b => b.Value_Json)
+                .HasColumnType("JSON");
 
                 modelBuilder.Entity<AuditLog>()
                 .Property(b => b.ActionData)

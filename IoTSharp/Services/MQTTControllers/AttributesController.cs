@@ -1,10 +1,8 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
+﻿using EasyCaching.Core;
 using IoTSharp.Contracts;
 using IoTSharp.Data;
-using IoTSharp.Extensions;
+using IoTSharp.EventBus;
 using IoTSharp.FlowRuleEngine;
-using k8s.KubeConfigModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -146,7 +144,6 @@ namespace IoTSharp.Services.MQTTControllers
         [MqttRoute("request/{keyname}/{requestid}/binary")]
         public async Task RequestBinary(string keyname, string requestid)
         {
-
             Dictionary<string, object> keyValues = new Dictionary<string, object>();
             try
             {
@@ -180,7 +177,7 @@ namespace IoTSharp.Services.MQTTControllers
                     var _dts = await qf.ToListAsync();
                     foreach (var kv in _dts)
                     {
-                        reps.Add(kv.Key,kv.Value);
+                        reps.Add(kv.Key, kv.Value);
                     }
                     await Server.PublishAsync(ClientId, $"devices/me/attributes/response/{requestid}", reps);
                 }
@@ -190,7 +187,5 @@ namespace IoTSharp.Services.MQTTControllers
                 _logger.LogWarning(ex, $"{ex.Message}");
             }
         }
-
-       
     }
 }

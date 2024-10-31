@@ -1,24 +1,16 @@
-﻿
-using IoTSharp;
-using IoTSharp.Contracts;
-using IoTSharp.Data;
+﻿using IoTSharp.Data;
 using IoTSharp.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using ShardingCore.Core.ShardingConfigurations;
 using Microsoft.Data.Sqlite;
-using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Options;
+using ShardingCore.Core.ShardingConfigurations;
+using System.IO;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IoTSharpDataBuilderExtensions
     {
-      
-
         public static void ConfigureSqlite(this IServiceCollection services, string connectionString, int poolSize, IHealthChecksBuilder checksBuilder, HealthChecksUIBuilder healthChecksUI)
         {
             SqliteConnectionStringBuilder builder = new SqliteConnectionStringBuilder(connectionString);
@@ -29,8 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSqlite<ApplicationDbContext>(connectionString, opt => opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
                                    .MigrationsAssembly("IoTSharp.Data.Sqlite"));
             checksBuilder.AddSqlite(connectionString, name: "IoTSharp.Data.Sqlite");
-            healthChecksUI.AddSqliteStorage($"Data Source={fi.DirectoryName}{Path.DirectorySeparatorChar}health_checks.db",opt => opt.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning)));
-
+            healthChecksUI.AddSqliteStorage($"Data Source={fi.DirectoryName}{Path.DirectorySeparatorChar}health_checks.db", opt => opt.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning)));
         }
 
         public static void UseSQLiteToSharding(this ShardingConfigOptions options)
@@ -41,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
             options.UseShardingTransaction((conn, builder) =>
             {
-                builder.UseSqlite(conn,opt => opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                builder.UseSqlite(conn, opt => opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
         }
 

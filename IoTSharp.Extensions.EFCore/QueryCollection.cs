@@ -21,6 +21,7 @@ namespace IoTSharp.EasyEFQuery
         EndWidth = 8,
         Range = 9
     }
+
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum Condition
@@ -28,14 +29,16 @@ namespace IoTSharp.EasyEFQuery
         OrElse = 1,
         AndAlso = 2
     }
+
     public class Query
     {
-        
         public string Name { get; set; }
         public Operators Operator { get; set; }
         public object Value { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object ValueMin { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object ValueMax { get; set; }
     }
@@ -46,16 +49,18 @@ namespace IoTSharp.EasyEFQuery
         {
             return new QueryCollection();
         }
+
         public static QueryCollection Create(string json)
         {
-            return  Newtonsoft.Json.JsonConvert.DeserializeObject<QueryCollection>(json);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<QueryCollection>(json);
         }
-        public  override string ToString()
+
+        public override string ToString()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
-
     }
+
     public class ReplaceExpressionVisitor : ExpressionVisitor
     {
         private readonly Expression _oldValue;
@@ -77,24 +82,25 @@ namespace IoTSharp.EasyEFQuery
             return base.Visit(node);
         }
     }
+
     public static class QueryCollectionExtension
     {
-       
-        public static QueryCollection Parse(this  QueryCollection queries, string json)
+        public static QueryCollection Parse(this QueryCollection queries, string json)
         {
-            var jo= Newtonsoft.Json.Linq.JObject.Parse(json);
+            var jo = Newtonsoft.Json.Linq.JObject.Parse(json);
             jo.Merge(queries);
             return jo.ToObject<QueryCollection>();
         }
-        public static Expression<Func<T, bool>> AndWith<T>(this Expression<Func<T, bool>> first, QueryCollection queries ) where T : class
+
+        public static Expression<Func<T, bool>> AndWith<T>(this Expression<Func<T, bool>> first, QueryCollection queries) where T : class
         {
             return first.AndWith(queries.AsExpression<T>(), Expression.AndAlso);
         }
+
         public static Expression<Func<T, bool>> OrWith<T>(this Expression<Func<T, bool>> first, QueryCollection queries) where T : class
         {
             return first.AndWith(queries.AsExpression<T>(), Expression.OrElse);
         }
-
 
         private static Expression<Func<T, bool>> AndWith<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2, Func<Expression, Expression, BinaryExpression> func)
         {
@@ -103,6 +109,7 @@ namespace IoTSharp.EasyEFQuery
             Expression arg2 = new ReplaceExpressionVisitor(expr2.Parameters[0], parameterExpression).Visit(expr2.Body);
             return Expression.Lambda<Func<T, bool>>(func(arg, arg2), new ParameterExpression[1] { parameterExpression });
         }
+
         public static Expression<Func<T, bool>> AsExpression<T>(this QueryCollection queries, Condition? condition = Condition.OrElse) where T : class
         {
             Type targetType = typeof(T);

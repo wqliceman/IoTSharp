@@ -3,11 +3,9 @@ using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Data.Taos;
 using IoTSharp.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Data;
 using System.Text;
 
@@ -237,8 +235,8 @@ namespace IoTSharp.Storage
         {
             if (_taos.State != System.Data.ConnectionState.Open) _taos.Open();
             string sql = $"select last_row(value_type) from telemetrydata where deviceid='{deviceId:N}' and keyname='{key}'";
-            var temp =await _taos.CreateCommand(sql).ExecuteScalarAsync();
-            if(temp==null || !int.TryParse(temp.ToString(),out int type)) return null; 
+            var temp = await _taos.CreateCommand(sql).ExecuteScalarAsync();
+            if (temp == null || !int.TryParse(temp.ToString(), out int type)) return null;
             return (DataType)type;
         }
 
@@ -256,10 +254,10 @@ namespace IoTSharp.Storage
                 case DataType.Double:
                 case DataType.Long:
                     return await AggregateAsync(deviceId, key, lastTemp.Value, begin, end, every, aggregate);
+
                 default:
                     return await GetAllData(deviceId, key, begin, end);
             }
-
         }
 
         private Task<List<TelemetryDataDto>> GetAllData(Guid deviceId, string key, DateTime begin, DateTime end)
@@ -306,7 +304,6 @@ namespace IoTSharp.Storage
             return results;
         }
 
-
         private string GetFiledName(DataType dataType)
         {
             return dataType switch
@@ -316,6 +313,5 @@ namespace IoTSharp.Storage
                 _ => throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null)
             };
         }
-
     }
 }

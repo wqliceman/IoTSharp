@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
@@ -10,6 +8,7 @@ namespace IoTSharp.Data
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
+
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -19,9 +18,11 @@ namespace IoTSharp.Data
         public string Street { get; set; }
         public string Address { get; set; }
         public int ZipCode { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public List<Customer> Customers { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public List<Device> Devices { get; set; }

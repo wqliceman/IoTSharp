@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace IoTSharp.Controllers
@@ -35,7 +34,7 @@ namespace IoTSharp.Controllers
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IConfiguration configuration, ILogger<AccountController> logger, ApplicationDbContext context
-           , ApplicationDBInitializer dBInitializer,IOptions<AppSettings> options)
+           , ApplicationDBInitializer dBInitializer, IOptions<AppSettings> options)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -82,20 +81,20 @@ namespace IoTSharp.Controllers
         }
 
         /// <summary>
-        /// 域名可以不配置， 默认会使用机器名  
+        /// 域名可以不配置， 默认会使用机器名
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = nameof(UserRole.SystemAdmin))]
         [HttpPost]
         public ApiResult CreateRootCertificate()
         {
-            var domain  =_setting.MqttBroker.DomainName ?? this.Request.Host.ToString();
+            var domain = _setting.MqttBroker.DomainName ?? this.Request.Host.ToString();
             ApiResult result = new ApiResult(ApiCode.Success, "OK");
             if (!_setting.MqttBroker.EnableTls)
             {
                 result = new ApiResult(ApiCode.NotEnableTls, "TLS is not yet used, please enable it in the configuration item. ");
             }
-           else  if (_setting.MqttBroker.CACertificate != null)
+            else if (_setting.MqttBroker.CACertificate != null)
             {
                 result = new ApiResult(ApiCode.AlreadyExists, "CACertificate already exists.");
             }
@@ -103,7 +102,7 @@ namespace IoTSharp.Controllers
             {
                 result = new ApiResult(ApiCode.NeedServerIPAddress, "ServerIPAddress     is required.");
             }
-            else if ( Uri.TryCreate(domain, UriKind.Absolute, out  Uri _uri))
+            else if (Uri.TryCreate(domain, UriKind.Absolute, out Uri _uri))
             {
                 try
                 {
@@ -111,11 +110,11 @@ namespace IoTSharp.Controllers
                     var option = _setting.MqttBroker;
                     var fx = new System.IO.FileInfo(option.CACertificateFile);
                     if (!fx.Directory.Exists) fx.Directory.Create();
-                      fx = new System.IO.FileInfo(option.CAPrivateKeyFile);
+                    fx = new System.IO.FileInfo(option.CAPrivateKeyFile);
                     if (!fx.Directory.Exists) fx.Directory.Create();
-                      fx = new System.IO.FileInfo(option.PrivateKeyFile);
+                    fx = new System.IO.FileInfo(option.PrivateKeyFile);
                     if (!fx.Directory.Exists) fx.Directory.Create();
-                      fx = new System.IO.FileInfo(option.CertificateFile);
+                    fx = new System.IO.FileInfo(option.CertificateFile);
                     if (!fx.Directory.Exists) fx.Directory.Create();
                     var ca = _uri.CreateCA(option.CACertificateFile, option.CAPrivateKeyFile);
                     ca.CreateBrokerTlsCert(_uri.Host, Dns.GetHostAddresses(_uri.Host).FirstOrDefault(),
@@ -125,10 +124,10 @@ namespace IoTSharp.Controllers
                 }
                 catch (Exception exception)
                 {
-                    result = new ApiResult(ApiCode.Exception, exception.Message );
+                    result = new ApiResult(ApiCode.Exception, exception.Message);
                 }
             }
-            else  
+            else
             {
                 result = new ApiResult(ApiCode.Exception, "Url error.");
             }

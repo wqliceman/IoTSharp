@@ -5,8 +5,6 @@ using MQTTnet.Exceptions;
 using MQTTnet.Protocol;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +14,7 @@ namespace IoTSharp.Extensions
     /// <summary>
     /// https://github.com/chkr1011/MQTTnet/blob/master/Source/MQTTnet.Extensions.Rpc/MqttRpcClient.cs
     /// </summary>
-    public class  RpcClient : IDisposable
+    public class RpcClient : IDisposable
     {
         private readonly ConcurrentDictionary<string, TaskCompletionSource<byte[]>> _waitingCalls = new ConcurrentDictionary<string, TaskCompletionSource<byte[]>>();
         private readonly IMqttClient _mqttClient;
@@ -24,30 +22,26 @@ namespace IoTSharp.Extensions
         private MqttClientOptions _mqtt;
         private bool disposedValue;
 
-        public RpcClient(IMqttClient mqttClient,  ILogger logger)
+        public RpcClient(IMqttClient mqttClient, ILogger logger)
         {
             _mqttClient = mqttClient ?? throw new ArgumentNullException(nameof(mqttClient));
             _logger = logger;
             _mqttClient.ApplicationMessageReceivedAsync += OnApplicationMessageReceived;
         }
 
-      
-
-        public RpcClient(MqttClientOptions mqtt, Microsoft.Extensions.Logging.ILogger _logger) :this (new MQTTnet.MqttFactory().CreateMqttClient(), _logger)
+        public RpcClient(MqttClientOptions mqtt, Microsoft.Extensions.Logging.ILogger _logger) : this(new MQTTnet.MqttFactory().CreateMqttClient(), _logger)
         {
             _mqtt = mqtt;
-          
         }
- 
-       
+
         public Task<byte[]> ExecuteAsync(TimeSpan timeout, string deviceid, string methodName, string payload, MqttQualityOfServiceLevel qualityOfServiceLevel)
         {
-            return ExecuteAsync(timeout, deviceid, methodName,  Encoding.UTF8.GetBytes(payload), qualityOfServiceLevel, CancellationToken.None);
+            return ExecuteAsync(timeout, deviceid, methodName, Encoding.UTF8.GetBytes(payload), qualityOfServiceLevel, CancellationToken.None);
         }
 
         public Task<byte[]> ExecuteAsync(TimeSpan timeout, string deviceid, string methodName, string payload, MqttQualityOfServiceLevel qualityOfServiceLevel, CancellationToken cancellationToken)
         {
-            return ExecuteAsync(timeout,  deviceid, methodName, Encoding.UTF8.GetBytes(payload), qualityOfServiceLevel, cancellationToken);
+            return ExecuteAsync(timeout, deviceid, methodName, Encoding.UTF8.GetBytes(payload), qualityOfServiceLevel, cancellationToken);
         }
 
         public Task<byte[]> ExecuteAsync(TimeSpan timeout, string deviceid, string methodName, byte[] payload, MqttQualityOfServiceLevel qualityOfServiceLevel)
@@ -133,8 +127,6 @@ namespace IoTSharp.Extensions
             return Task.CompletedTask;
         }
 
-       
-
         public async Task ConnectAsync()
         {
             await _mqttClient.ConnectAsync(_mqtt);
@@ -164,8 +156,6 @@ namespace IoTSharp.Extensions
                 disposedValue = true;
             }
         }
-
-      
 
         public void Dispose()
         {

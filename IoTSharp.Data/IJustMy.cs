@@ -1,10 +1,4 @@
-﻿using IoTSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace IoTSharp.Data
+﻿namespace IoTSharp.Data
 {
     public interface IJustMy
     {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Dtos
 {
@@ -10,8 +7,6 @@ namespace IoTSharp.Dtos
         public Guid DeviceModelId { get; set; }
         public string ModelName { get; set; }
         public string ModelDesc { get; set; }
-
-
     }
 
     public class DeviceModelCommandDto
@@ -28,7 +23,5 @@ namespace IoTSharp.Dtos
         public string CommandTemplate { get; set; }
 
         public Guid DeviceModelId { get; set; }
-
-
     }
 }

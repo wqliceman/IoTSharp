@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using RestSharp;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using RestSharp;
-using System.IO;
 
 namespace Newtonsoft.Json
 {
-
     public static class NewtonsoftRestClientExtensions
     {
         public static async Task<T> GetDataBy<T>(this Uri uri, params object[] objparam)
@@ -24,12 +20,13 @@ namespace Newtonsoft.Json
                     });
                 }
             });
-
         }
+
         public static async Task<T> GetDataBy<T>(this Uri uri, Action<RestRequest> action)
         {
             return await GetDataBy<T>(uri, action, false);
         }
+
         public static async Task<T> GetDataBy<T>(this Uri uri, Action<RestRequest> action, bool checktype)
         {
             var result1 = default(T);
@@ -66,8 +63,6 @@ namespace Newtonsoft.Json
             return await client.DownloadStreamAsync(request);
         }
 
-
-
         public static async Task<byte[]?> DownLoadFile(this Uri uri)
         {
             var client = Create(uri);
@@ -86,6 +81,7 @@ namespace Newtonsoft.Json
                 }
             });
         }
+
         public static async Task<R> PostDataBy<R>(this Uri uri, Action<RestRequest> action)
         {
             var result = default(R);
@@ -97,13 +93,11 @@ namespace Newtonsoft.Json
             return result;
         }
 
-
         private static RestClient Create(Uri uri)
         {
-            var client = new RestClient(new RestClientOptions(uri) {  MaxTimeout = -1, FollowRedirects = false });
+            var client = new RestClient(new RestClientOptions(uri) { MaxTimeout = -1, FollowRedirects = false });
             client.AddDefaultHeader(KnownHeaders.Accept, "*/*");
             return client;
         }
     }
 }
-

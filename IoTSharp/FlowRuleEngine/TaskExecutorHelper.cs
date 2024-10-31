@@ -9,15 +9,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace IoTSharp.FlowRuleEngine
 {
     public class TaskExecutorHelper
     {
-
-        Dictionary<string, Type> pairs = null;
-        Dictionary<string, Type> pairstypename = null;
+        private Dictionary<string, Type> pairs = null;
+        private Dictionary<string, Type> pairstypename = null;
         private IServiceProvider _sp;
         private ApplicationDbContext _context;
 
@@ -26,6 +24,7 @@ namespace IoTSharp.FlowRuleEngine
             _sp = scopeFactor.CreateScope().ServiceProvider;
             _context = _sp.GetRequiredService<ApplicationDbContext>();
         }
+
         public Dictionary<string, Type> GetTaskExecutorList()
         {
             if (pairs == null)
@@ -34,6 +33,7 @@ namespace IoTSharp.FlowRuleEngine
             }
             return pairs;
         }
+
         public TaskAction CreateInstance(string name)
         {
             if (pairs == null)
@@ -44,14 +44,15 @@ namespace IoTSharp.FlowRuleEngine
             if (pairs.TryGetValue(name, out var t))
             {
                 obj = CreateInstance(t) as TaskAction;
-                if (obj != null) {
+                if (obj != null)
+                {
                     obj.ServiceProvider = this._sp;
                 }
             }
 
             return obj;
-       
         }
+
         public TaskAction CreateInstanceByTypeName(string typename)
         {
             if (pairs == null)
@@ -74,7 +75,7 @@ namespace IoTSharp.FlowRuleEngine
         {
             var cnst = t.GetConstructors();
             TaskAction obj;
-            if (cnst.FirstOrDefault()?.GetParameters().Any()==true)
+            if (cnst.FirstOrDefault()?.GetParameters().Any() == true)
             {
                 obj = _sp.GetRequiredService(t) as TaskAction;
             }
@@ -92,7 +93,7 @@ namespace IoTSharp.FlowRuleEngine
         private void LoadTypesInfo()
         {
             pairs = new Dictionary<string, Type>();
-            Assembly.GetEntryAssembly().GetTypes().Where(c => c.BaseType== typeof(TaskAction)).ToList().ForEach(c =>
+            Assembly.GetEntryAssembly().GetTypes().Where(c => c.BaseType == typeof(TaskAction)).ToList().ForEach(c =>
             {
                 var key = c.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? c.FullName;
                 if (!pairs.ContainsKey(key))
@@ -119,4 +120,3 @@ namespace IoTSharp.FlowRuleEngine
         }
     }
 }
-

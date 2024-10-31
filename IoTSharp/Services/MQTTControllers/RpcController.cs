@@ -1,9 +1,8 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
+﻿using EasyCaching.Core;
 using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Data.Extensions;
-using IoTSharp.Extensions;
+using IoTSharp.EventBus;
 using IoTSharp.FlowRuleEngine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -81,7 +80,7 @@ namespace IoTSharp.Services.MQTTControllers
                 }
             }
             , TimeSpan.FromSeconds(_settings.RuleCachingExpiration));
-            if (rules.HasValue && rules.Value!=Guid.Empty)
+            if (rules.HasValue && rules.Value != Guid.Empty)
             {
                 var obj = new { Message.Topic, Payload = Convert.ToBase64String(Message.PayloadSegment.ToArray()), ClientId, RPCMethod = method };
                 _logger.LogInformation($"客户端{ClientId}rpc请求方法{method}通过规则链{rules.Value}进行处理。");

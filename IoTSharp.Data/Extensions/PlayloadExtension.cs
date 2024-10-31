@@ -1,16 +1,13 @@
 ﻿using IoTSharp.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data.Extensions
 {
     public static class PlayloadExtension
     {
-        public static ExpandoObject ToDynamic( this Dictionary<string, object> dc)
+        public static ExpandoObject ToDynamic(this Dictionary<string, object> dc)
         {
             ExpandoObject obj = new ExpandoObject();
             dc.ToList().ForEach(kv =>
@@ -19,7 +16,8 @@ namespace IoTSharp.Data.Extensions
             });
             return obj;
         }
-        public static ExpandoObject ToDynamic(this List <TelemetryDataDto> array)
+
+        public static ExpandoObject ToDynamic(this List<TelemetryDataDto> array)
         {
             ExpandoObject exps = new();
             array.ForEach(td =>
@@ -28,6 +26,7 @@ namespace IoTSharp.Data.Extensions
             });
             return exps;
         }
+
         public static Dictionary<string, object> ToDictionary(this PlayloadData msg)
         {
             var mb = msg.MsgBody;
@@ -69,7 +68,6 @@ namespace IoTSharp.Data.Extensions
                 {
                     dc.Add(kp.Key, kp.Value);
                 }
-
             });
             return dc;
         }

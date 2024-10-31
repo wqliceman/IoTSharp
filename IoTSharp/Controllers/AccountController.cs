@@ -174,7 +174,6 @@ namespace IoTSharp.Controllers
             }
         }
 
-
         private async Task<ModelRefreshToken> CreateToken(string name)
         {
             var appUser = _userManager.Users.SingleOrDefault(r => r.Email == name);
@@ -460,6 +459,7 @@ namespace IoTSharp.Controllers
                 return new ApiResult<LoginResult>(ApiCode.NotFoundCustomer, "未找到客户", null);
             }
         }
+
         /// <summary>
         /// 为当前客户所在的租户新增用户  zhangjie 20230308
         /// </summary>
@@ -562,7 +562,6 @@ namespace IoTSharp.Controllers
                      TenantName = s.Tenant.Name
                  });
 
-
             if (m.CustomerId != Guid.Empty)
             {
                 var data = await m.Query(srcDb, c => c.Id != "", c => c.UserName, c => new UserItemDto()
@@ -576,10 +575,8 @@ namespace IoTSharp.Controllers
                     LockoutEnd = c.LockoutEnd,
                     CustomerName = c.CustomerName,
                     TenantName = c.TenantName
-
                 });
                 return new ApiResult<PagedData<UserItemDto>>(ApiCode.Success, "OK", data);
-
             }
             else
             {
@@ -592,10 +589,8 @@ namespace IoTSharp.Controllers
                     AccessFailedCount = c.AccessFailedCount,
                     LockoutEnabled = c.LockoutEnabled,
                     LockoutEnd = c.LockoutEnd,
-
                 });
                 return new ApiResult<PagedData<UserItemDto>>(ApiCode.Success, "OK", data);
-
             }
         }
 
@@ -625,8 +620,8 @@ namespace IoTSharp.Controllers
         /// NotFoundUser = 10021,
         /// CanNotLockUser = 10022,
         ///LockUserHaveError = 10023
-        ///CanNotLockYourself =10028 
-        ///CanNotUnlockYourself =10029 
+        ///CanNotLockYourself =10028
+        ///CanNotUnlockYourself =10029
         ///</returns>
         [HttpPut]
         public async Task<ApiResult> Lock(LockDto dto)
@@ -796,6 +791,7 @@ namespace IoTSharp.Controllers
                 return new ApiResult<bool>(ApiCode.Success, "OK", false);
             }
         }
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<ApiResult> ResetPasswordAsync(string email, string rootkey, string newpassword)
@@ -830,7 +826,6 @@ namespace IoTSharp.Controllers
                 {
                     return new ApiResult(ApiCode.InValidData, "根密码不对，请修改服务器配置文件。");
                 }
-
             }
         }
     }

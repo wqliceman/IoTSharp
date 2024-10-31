@@ -1,18 +1,10 @@
-﻿
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
 
 namespace IoTSharp.EventBus.NServiceBus
 {
     public static class DependencyInjection
     {
-
         public static IApplicationBuilder UseNServiceBusEventBus(this IApplicationBuilder app)
         {
             var provider = app.ApplicationServices;
@@ -20,7 +12,7 @@ namespace IoTSharp.EventBus.NServiceBus
             return app;
         }
 
-        public static void UseNServiceBus(this EventBusOption  opt)
+        public static void UseNServiceBus(this EventBusOption opt)
         {
             var settings = opt.AppSettings;
             var healthChecks = opt.HealthChecks;
@@ -30,7 +22,5 @@ namespace IoTSharp.EventBus.NServiceBus
             services.AddTransient<ISubscriber, NSBusSubscriber>();
             services.AddTransient<IPublisher, NSBusPublisher>();
         }
-
-        
     }
 }

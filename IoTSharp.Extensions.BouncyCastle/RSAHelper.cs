@@ -234,11 +234,8 @@ namespace IoTSharp.Extensions.BouncyCastle
             return rsa.VerifyData(Data, hashAlgorithm, rgbSignature);
         }
 
-        
-
         #endregion 验签
 
- 
         #region 私钥加密
 
         /// <summary>
@@ -323,6 +320,7 @@ namespace IoTSharp.Extensions.BouncyCastle
             byte[] signatureByte = Convert.FromBase64String(signature);
             return signer.VerifySignature(signatureByte);
         }
+
         #endregion 验签
     }
 }

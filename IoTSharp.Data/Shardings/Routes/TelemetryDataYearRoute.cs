@@ -1,14 +1,14 @@
-using System;
 using IoTSharp.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ShardingCore.Core.EntityMetadatas;
 using ShardingCore.Core.ServiceProviders;
 using ShardingCore.VirtualRoutes.Years;
+using System;
 
 namespace IoTSharp.Data.Shardings.Routes
 {
-    public class TelemetryDataYearRoute:AbstractSimpleShardingYearKeyDateTimeVirtualTableRoute<TelemetryData>
+    public class TelemetryDataYearRoute : AbstractSimpleShardingYearKeyDateTimeVirtualTableRoute<TelemetryData>
     {
         private readonly AppSettings _setting;
 
@@ -17,6 +17,7 @@ namespace IoTSharp.Data.Shardings.Routes
             var options = provider.ApplicationServiceProvider.GetService<IOptions<AppSettings>>();
             _setting = options.Value;
         }
+
         public override void Configure(EntityMetadataTableBuilder<TelemetryData> builder)
         {
             builder.ShardingProperty(o => o.DateTime);

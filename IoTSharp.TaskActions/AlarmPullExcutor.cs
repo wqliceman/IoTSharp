@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using System;
+using System.ComponentModel;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace IoTSharp.TaskActions
 {
@@ -82,27 +79,21 @@ namespace IoTSharp.TaskActions
             }
         }
 
-
         private class Alarm
         {
-          
             public string originatorType { get; set; }
 
-            
             public string originatorName { get; set; }
-       
+
             public string alarmType { get; set; }
-       
+
             public string alarmDetail { get; set; }
-    
+
             public string serverity { get; set; }
-      
+
             public string warnDataId { get; set; }
             public DateTime createDateTime { get; set; }
-         
         }
-
-
 
         private class ModelExecutorConfig
         {
@@ -113,7 +104,6 @@ namespace IoTSharp.TaskActions
             public string UserName { get; set; }
             public string Token { get; set; }
         }
-
 
         private class MessagePullResult
         {

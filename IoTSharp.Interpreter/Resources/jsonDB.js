@@ -39,12 +39,10 @@
  +-----------------------------------------
  */
 
-
 _history = null,
     DBCore = {},
     Database = {},
     DBExpand = {};
-
 
 /**
  * [jsonDB 初始化模型，支持定义本地数据库和数据表]
@@ -53,7 +51,6 @@ _history = null,
  * @return jsonDB
  */
 var jsonDB = function (data, dbName) {
-
     //创建数据库或者数据表
     if (data) {
         dbName = dbName || 'json_db';
@@ -67,7 +64,6 @@ jsonDB.fn = jsonDB.prototype = {
     //初始化插件
     init: function (alias) {
         if (alias) {
-
         }
         return this;
     },
@@ -406,8 +402,6 @@ DBCore.fn = DBCore.prototype = {
     }
 }
 
-
-
 //追加扩展功能
 jsonDB.fn = jsonDB.prototype = extend(jsonDB.fn, DBExpand);
 
@@ -427,4 +421,3 @@ function extend() {
 
     return target;
 }
- 

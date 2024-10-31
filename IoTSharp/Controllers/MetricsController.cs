@@ -1,17 +1,11 @@
 ﻿using EasyCaching.Core;
 using IoTSharp.Contracts;
-using IoTSharp.Data;
 using IoTSharp.EventBus;
-using IoTSharp.FlowRuleEngine;
-using k8s.KubeConfigModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client.Extensions.Msal;
-using MongoDB.Driver.Core.Servers;
 using System;
 using System.Threading.Tasks;
 
@@ -28,13 +22,14 @@ namespace IoTSharp.Controllers
         private readonly IPublisher _queue;
         private IEasyCachingProvider _caching;
 
-        public MetricsController( ILogger<MetricsController> logger, IPublisher queue, IEasyCachingProviderFactory factory, IOptions<AppSettings> options)
+        public MetricsController(ILogger<MetricsController> logger, IPublisher queue, IEasyCachingProviderFactory factory, IOptions<AppSettings> options)
         {
             _logger = logger;
             _queue = queue;
             string _hc_Caching = $"{nameof(CachingUseIn)}-{Enum.GetName(options.Value.CachingUseIn)}";
             _caching = factory.GetCachingProvider(_hc_Caching);
         }
+
         /// <summary>
         /// 返回事件总线的统计信息
         /// </summary>
@@ -48,7 +43,7 @@ namespace IoTSharp.Controllers
         {
             try
             {
-                var data = await _caching.GetAsync(nameof(EventBusMetrics), async ()=> await _queue.GetMetrics(),TimeSpan.FromMinutes(1));
+                var data = await _caching.GetAsync(nameof(EventBusMetrics), async () => await _queue.GetMetrics(), TimeSpan.FromMinutes(1));
                 return new ApiResult<EventBusMetrics>(ApiCode.Success, "Ok", data.Value);
             }
             catch (Exception ex)
@@ -56,6 +51,5 @@ namespace IoTSharp.Controllers
                 return new ApiResult<EventBusMetrics>(ApiCode.Exception, ex.Message, null);
             }
         }
-
     }
 }

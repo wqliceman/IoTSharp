@@ -1,32 +1,25 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using IoTSharp.Contracts;
+using IoTSharp.Data;
+using IoTSharp.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using MQTTnet;
+using MQTTnet.AspNetCore;
+using MQTTnet.AspNetCore.Routing;
 using MQTTnet.Client;
+using MQTTnet.Server;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using MQTTnet.AspNetCore;
-using MQTTnet.Diagnostics;
-using IoTSharp.Services;
-using MQTTnet.Server;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Security.Cryptography.X509Certificates;
-using MQTTnet;
-using MQTTnet.AspNetCore.Routing;
-using IoTSharp.Data;
-using Newtonsoft.Json.Linq;
-using IoTSharp.Contracts;
 using System.Net.Security;
-using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace IoTSharp
 {
     public static class MqttExtension
     {
-
         public static void AddIoTSharpMqttServer(this IServiceCollection services, MqttBrokerSetting broker)
         {
             services.AddMqttControllers();
@@ -38,14 +31,13 @@ namespace IoTSharp
                 options.WithDefaultEndpointPort(broker.Port).WithDefaultEndpoint();
                 if (broker.EnableTls)
                 {
-                    if (broker.CACertificate!=null)
+                    if (broker.CACertificate != null)
                     {
                         broker.CACertificate.LoadCAToRoot();
-                   
                     }
                     options.WithEncryptedEndpoint();
                     options.WithEncryptedEndpointPort(broker.TlsPort);
-                    if (broker.BrokerCertificate!=null)
+                    if (broker.BrokerCertificate != null)
                     {
                         options.WithEncryptionCertificate(broker.CACertificate.Export(X509ContentType.Pfx)).WithEncryptionSslProtocol(broker.SslProtocol);
                     }
@@ -67,7 +59,7 @@ namespace IoTSharp
                                 chain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
                                 chain.ChainPolicy.TrustMode = X509ChainTrustMode.CustomRootTrust;
                                 chain.ChainPolicy.CustomTrustStore.Add(broker.CACertificate);
-                                if (chain.Build((X509Certificate2)certificate))//如果是本CA办法， 则能构建成功， 如果是其他CA办法，则失败。 
+                                if (chain.Build((X509Certificate2)certificate))//如果是本CA办法， 则能构建成功， 如果是其他CA办法，则失败。
                                 {
                                     //确认跟证书在当前
                                     result = chain.ChainElements.Cast<X509ChainElement>().Any(a => a.Certificate.Thumbprint == broker.CACertificate.Thumbprint);
@@ -78,8 +70,6 @@ namespace IoTSharp
 
                         return result;
                     });
-
-
                 }
                 else
                 {
@@ -89,7 +79,7 @@ namespace IoTSharp
                 options.WithPersistentSessions();
                 options.Build();
             }).AddMqttConnectionHandler()
-                    .AddConnections(); 
+                    .AddConnections();
             services.AddMqttWebSocketServerAdapter();
         }
 
@@ -108,8 +98,6 @@ namespace IoTSharp
                     server.ClientDisconnectedAsync += mqttEvents.Server_ClientDisconnected;
                 });
         }
-
-
 
         public static Dictionary<string, object> ConvertPayloadToDictionary(this MqttApplicationMessage msg)
         {
@@ -130,6 +118,7 @@ namespace IoTSharp
                 case DataType.Boolean:
                     kv = new(item.KeyName, item.Value_Boolean);
                     break;
+
                 case DataType.String:
                     kv = new(item.KeyName, item.Value_String);
                     break;
@@ -166,7 +155,7 @@ namespace IoTSharp
         }
         public static async Task PublishAsync<T>(this MqttServer mqtt, string SenderClientId, string topic, T _payload) where T : class
         {
-            await mqtt.PublishAsync(SenderClientId, new MqttApplicationMessage() { Topic = topic, PayloadSegment    = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(_payload) });
+            await mqtt.PublishAsync(SenderClientId, new MqttApplicationMessage() { Topic = topic, PayloadSegment = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(_payload) });
         }
         public static async Task PublishAsync(this MqttServer mqtt, string SenderClientId, string topic, string _payload)
         {
@@ -177,13 +166,12 @@ namespace IoTSharp
             await mqtt.PublishAsync(SenderClientId, new MqttApplicationMessage() { Topic = topic, PayloadSegment = _payload });
         }
 
-        public static async Task   PublishAsync ( this MqttServer mqtt, string SenderClientId ,MqttApplicationMessage message)
+        public static async Task PublishAsync(this MqttServer mqtt, string SenderClientId, MqttApplicationMessage message)
         {
             var clients = await mqtt.GetClientsAsync();
-            var client= clients.FirstOrDefault(c => c.Id == SenderClientId);
+            var client = clients.FirstOrDefault(c => c.Id == SenderClientId);
             await client.Session.EnqueueApplicationMessageAsync(message);
         }
-
 
         public static void AddMqttClient(this IServiceCollection services, MqttClientSetting setting)
         {

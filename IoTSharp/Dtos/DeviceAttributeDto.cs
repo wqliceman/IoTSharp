@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
-using IoTSharp.Data;
+﻿using IoTSharp.Contracts;
+using System;
 
 namespace IoTSharp.Controllers
 {
@@ -13,10 +9,12 @@ namespace IoTSharp.Controllers
         public string KeyName { get; set; }
 
         public DateTime DateTime { get; set; }
+
         /// <summary>
         /// 数据侧
         /// </summary>
         public DataSide DataSide { get; set; }
+
         /// <summary>
         /// 数据类型
         /// </summary>
@@ -32,7 +30,5 @@ namespace IoTSharp.Controllers
         public byte[] Value_Binary { get; set; }
 
         public DataCatalog Catalog { get; set; }
-        
-
     }
 }

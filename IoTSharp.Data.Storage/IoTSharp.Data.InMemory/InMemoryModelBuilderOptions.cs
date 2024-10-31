@@ -14,7 +14,6 @@ namespace IoTSharp.Data.InMemory
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
         }
     }
 }

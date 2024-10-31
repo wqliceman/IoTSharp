@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShardingCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -20,10 +21,6 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ShardingCore.Extensions;
-using InfluxDB.Client.Api.Domain;
-using System.CodeDom.Compiler;
-using Humanizer;
 
 namespace IoTSharp.Controllers
 {
@@ -195,8 +192,6 @@ namespace IoTSharp.Controllers
             var rule = await _context.FlowRules.SingleOrDefaultAsync(c => c.RuleId == flowRule.RuleId && c.Tenant.Id == profile.Tenant);
             if (rule != null)
             {
-
-
                 var _customer = await _context.Customer.SingleOrDefaultAsync(c => c.Id == profile.Customer);
                 var _tenant = await _context.Tenant.SingleOrDefaultAsync(c => c.Id == profile.Tenant);
                 var newrule = new FlowRule();
@@ -328,8 +323,6 @@ namespace IoTSharp.Controllers
         [HttpGet]
         public async Task<ApiResult<PagedData<DeviceRuleDto>>> GetRuleDevices([FromQuery] DeviceParam m)
         {
-
-
             var profile = this.GetUserProfile();
             Expression<Func<DeviceRule, bool>> condition = x => x.Device.Customer.Id == profile.Customer && !x.Device.Deleted && x.Device.Tenant.Id == profile.Tenant && x.FlowRule.RuleId == m.ruleId;
             if (!string.IsNullOrEmpty(m.Name))
@@ -342,9 +335,7 @@ namespace IoTSharp.Controllers
                 {
                     condition = condition.And(x => x.Device.Name.Contains(m.Name));
                 }
-
             }
-
 
             var rows = await _context.DeviceRules.Include(c => c.FlowRule).Include(c => c.Device).Where(condition)
                 .Select(c => new DeviceRuleDto()
@@ -656,9 +647,7 @@ namespace IoTSharp.Controllers
             return new ApiResult<bool>(ApiCode.Success, "Ok", true);
         }
 
-
         [HttpPost]
-
         public ApiResult<bool> SaveDiagramV(ModelDiagram m)
         {
             var profile = this.GetUserProfile();
@@ -679,10 +668,8 @@ namespace IoTSharp.Controllers
                 {
                     switch (item.nodetype)
                     {
-
                         case "basic":
                             {
-
                                 var node = new Flow
                                 {
                                     FlowRule = rule,
@@ -706,6 +693,7 @@ namespace IoTSharp.Controllers
                                 _context.SaveChanges();
                             }
                             break;
+
                         case "executor":
                             {
                                 var node = new Flow
@@ -715,9 +703,9 @@ namespace IoTSharp.Controllers
                                     bpmnid = item.nodeId,
                                     FlowType = item.nodenamespace,
                                     NodeProcessParams = item.content,
-									NodeProcessScriptType = item.nodetype,
+                                    NodeProcessScriptType = item.nodetype,
 
-									NodeProcessClass = item.mata,
+                                    NodeProcessClass = item.mata,
                                     FlowStatus = 1,
                                     CreateId = CreatorId,
                                     Createor = profile.Id,
@@ -735,6 +723,7 @@ namespace IoTSharp.Controllers
                                 _context.SaveChanges();
                             }
                             break;
+
                         case "script":
                             {
                                 var node = new Flow
@@ -751,7 +740,7 @@ namespace IoTSharp.Controllers
                                     CreateDate = CreateDate,
                                     Customer = rule.Customer,
                                     Tenant = rule.Tenant,
-									FlowClass = item.nodeclass,
+                                    FlowClass = item.nodeclass,
                                     FlowNameSpace = item.nodetype,
                                     FlowIcon = item.icon,
                                     Top = item.top,
@@ -761,15 +750,11 @@ namespace IoTSharp.Controllers
                                 _context.SaveChanges();
                             }
                             break;
-
                     }
-
                 }
-
 
                 foreach (var item in m.lines)
                 {
-
                     var node = new Flow
                     {
                         FlowRule = rule,
@@ -789,17 +774,14 @@ namespace IoTSharp.Controllers
                     };
                     _context.Flows.AddRange(node);
                     _context.SaveChanges();
-
                 }
 
                 return new ApiResult<bool>(ApiCode.Success, "Ok", true);
-
             }
             catch (Exception exception)
             {
                 return new ApiResult<bool>(ApiCode.Exception, exception.Message, false);
             }
-        
         }
 
         [HttpGet]
@@ -809,7 +791,6 @@ namespace IoTSharp.Controllers
 
             try
             {
-
                 var flows = await _context.Flows
                     .Where(c => c.FlowRule.RuleId == id && c.FlowStatus > 0 && c.Tenant.Id == profile.Tenant)
                     .ToListAsync();
@@ -821,89 +802,80 @@ namespace IoTSharp.Controllers
                     switch (item.FlowNameSpace)
                     {
                         case "line":
-                        {
-                            m.lines.Add(new LineObject()
                             {
-                                sourceId = item.SourceId,
-                                linename = item.Flowname,
-                                targetId = item.TargetId,
-                                condition = item.Conditionexpression,
-                                linenamespace=item.FlowType,
-                                lineId = item.bpmnid,
-                            });
-                        }
+                                m.lines.Add(new LineObject()
+                                {
+                                    sourceId = item.SourceId,
+                                    linename = item.Flowname,
+                                    targetId = item.TargetId,
+                                    condition = item.Conditionexpression,
+                                    linenamespace = item.FlowType,
+                                    lineId = item.bpmnid,
+                                });
+                            }
                             break;
+
                         case "basic":
-                        {
-                            m.nodes.Add(new NodeObject()
                             {
-
-                                nodeId = item.bpmnid,
-                                nodetype = item.FlowNameSpace,
-                                name = item.Flowname,
-                                nodeclass = item.FlowClass,
-                                nodenamespace = item.FlowType,
-                                icon = item.FlowIcon,
-                                top = item.Top,
-                                left = item.Left
-                            });
-                        }
+                                m.nodes.Add(new NodeObject()
+                                {
+                                    nodeId = item.bpmnid,
+                                    nodetype = item.FlowNameSpace,
+                                    name = item.Flowname,
+                                    nodeclass = item.FlowClass,
+                                    nodenamespace = item.FlowType,
+                                    icon = item.FlowIcon,
+                                    top = item.Top,
+                                    left = item.Left
+                                });
+                            }
                             break;
+
                         case "script":
-                        {
-                            m.nodes.Add(new NodeObject()
                             {
-
-                                nodeId = item.bpmnid,
-                                nodetype = item.FlowNameSpace,
-                                name = item.Flowname,
-                                content = item.NodeProcessScript,
-                                mata = item.NodeProcessScriptType,
-                                nodeclass = item.FlowClass,
-                                nodenamespace = item.FlowType,
-                                icon = item.FlowIcon,
-                                top = item.Top,
-                                left = item.Left
-                            });
-                        }
+                                m.nodes.Add(new NodeObject()
+                                {
+                                    nodeId = item.bpmnid,
+                                    nodetype = item.FlowNameSpace,
+                                    name = item.Flowname,
+                                    content = item.NodeProcessScript,
+                                    mata = item.NodeProcessScriptType,
+                                    nodeclass = item.FlowClass,
+                                    nodenamespace = item.FlowType,
+                                    icon = item.FlowIcon,
+                                    top = item.Top,
+                                    left = item.Left
+                                });
+                            }
                             break;
+
                         case "executor":
-                        {
-                            m.nodes.Add(new NodeObject()
                             {
-
-                                nodeId = item.bpmnid,
-                                nodetype = item.FlowNameSpace,
-                                name = item.Flowname,
-                                content = item.NodeProcessParams,
-                                mata = item.NodeProcessClass,
-                                nodeclass = item.FlowClass,
-                                nodenamespace = item.FlowType,
-                                icon = item.FlowIcon,
-                                top = item.Top,
-                                left = item.Left
-
-                            });
-                        }
+                                m.nodes.Add(new NodeObject()
+                                {
+                                    nodeId = item.bpmnid,
+                                    nodetype = item.FlowNameSpace,
+                                    name = item.Flowname,
+                                    content = item.NodeProcessParams,
+                                    mata = item.NodeProcessClass,
+                                    nodeclass = item.FlowClass,
+                                    nodenamespace = item.FlowType,
+                                    icon = item.FlowIcon,
+                                    top = item.Top,
+                                    left = item.Left
+                                });
+                            }
                             break;
-
-
-
                     }
                 }
 
                 return new ApiResult<ModelDiagram>(ApiCode.Success, "Ok", m);
-
             }
             catch (Exception exception)
             {
                 return new ApiResult<ModelDiagram>(ApiCode.Exception, exception.Message, null);
             }
-
-
         }
-
-
 
         [HttpGet]
         public async Task<ApiResult<Activity>> GetDiagram(Guid id)
@@ -1402,8 +1374,6 @@ namespace IoTSharp.Controllers
 
             var d = formdata.Value<JToken>().ToObject<object>();
 
-
-
             var testabizId = Guid.NewGuid().ToString(); //根据业务保存起来，用来查询执行事件和步骤
             var result = await _flowRuleProcessor.RunFlowRules(ruleid, d, Guid.Empty, FlowRuleRunType.TestPurpose, testabizId);
             _context.SaveFlowResult(Guid.Empty, ruleid, result);
@@ -1493,8 +1463,6 @@ namespace IoTSharp.Controllers
             var _event = _context.BaseEvents.Include(c => c.FlowRule).SingleOrDefault(c => c.EventId == eventId);
             var _operations = _context.FlowOperations.Include(c => c.Flow).Where(c => c.BaseEvent == _event).ToList();
 
-
-
             var flows = _context.Flows.Where(c => c.FlowRule.RuleId == _event.FlowRule.RuleId);
             var sf = flows.Where(c => c.FlowType == "bpmn:SequenceFlow").ToArray();
             var links = new List<dynamic>();
@@ -1505,7 +1473,6 @@ namespace IoTSharp.Controllers
                 var source = _operations.FirstOrDefault(c => c.Flow.bpmnid == item.SourceId);
                 if (target != null && source != null)
                 {
-
                     links.Add(new { source = source.Flow.Flowname ?? source.bpmnid, target = target.Flow.Flowname ?? target.bpmnid, value = (target.AddDate - source.AddDate).Value.TotalMilliseconds });
                     var _sourcename = source.Flow.Flowname ?? source.bpmnid;
                     var _targetname = target.Flow.Flowname ?? target.bpmnid;
@@ -1628,7 +1595,7 @@ namespace IoTSharp.Controllers
         public async Task<ApiResult<RuleTaskExecutorTestResultDto>> TestTask(RuleTaskExecutorTestDto m)
         {
             var profile = this.GetUserProfile();
-            var result = await  _flowRuleProcessor.TestScript(m.ruleId, m.flowId, m.Data);
+            var result = await _flowRuleProcessor.TestScript(m.ruleId, m.flowId, m.Data);
             await _context.SaveChangesAsync();
             return new ApiResult<RuleTaskExecutorTestResultDto>(ApiCode.Success, "Ok", new RuleTaskExecutorTestResultDto() { Data = result.Data });
         }
@@ -1639,7 +1606,7 @@ namespace IoTSharp.Controllers
             var profile = this.GetUserProfile();
             var data = JsonConvert.DeserializeObject(m.Data) as JObject;
             var d = data.ToObject(typeof(ExpandoObject));
-            var result = await  _flowRuleProcessor.TestCondition(m.ruleId, m.flowId, d);
+            var result = await _flowRuleProcessor.TestCondition(m.ruleId, m.flowId, d);
             return new ApiResult<ConditionTestResult>(ApiCode.Success, "Ok", result);
         }
     }

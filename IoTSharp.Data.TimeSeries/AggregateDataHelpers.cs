@@ -3,7 +3,7 @@
 namespace IoTSharp.Storage
 {
     /// <summary>
-    /// 本地聚合方法， 针对那些关系数据库或者没法完美支持聚合的方式。 
+    /// 本地聚合方法， 针对那些关系数据库或者没法完美支持聚合的方式。
     /// </summary>
     internal static class AggregateDataHelpers
     {
@@ -43,7 +43,7 @@ namespace IoTSharp.Storage
                             }
                             else
                             {
-                                var dxx = d.FirstOrDefault();//用第一个值来取类型和keyname , 
+                                var dxx = d.FirstOrDefault();//用第一个值来取类型和keyname ,
                                 if (dxx != null)
                                 {
                                     var tdd = new TelemetryDataDto()
@@ -64,6 +64,7 @@ namespace IoTSharp.Storage
                                                 tdd.Value = (double)d.Average(f => (double)f.Value);
                                             }
                                             break;
+
                                         case Aggregate.Median:
                                             if (tdd.DataType == DataType.Long)
                                             {
@@ -78,12 +79,15 @@ namespace IoTSharp.Storage
                                                 tdd.Value = _vxx[indx].Value;
                                             }
                                             break;
+
                                         case Aggregate.Last:
                                             tdd.Value = d.Last().Value;
                                             break;
+
                                         case Aggregate.First:
                                             tdd.Value = d.First().Value;
                                             break;
+
                                         case Aggregate.Max:
                                             if (tdd.DataType == DataType.Long)
                                             {
@@ -94,6 +98,7 @@ namespace IoTSharp.Storage
                                                 tdd.Value = (double)d.Max(f => (double)f.Value);
                                             }
                                             break;
+
                                         case Aggregate.Min:
                                             if (tdd.DataType == DataType.Long)
                                             {
@@ -104,6 +109,7 @@ namespace IoTSharp.Storage
                                                 tdd.Value = (double)d.Min(f => (double)f.Value);
                                             }
                                             break;
+
                                         case Aggregate.Sum:
                                             if (tdd.DataType == DataType.Long)
                                             {
@@ -114,6 +120,7 @@ namespace IoTSharp.Storage
                                                 tdd.Value = (double)d.Sum(f => (double)f.Value);
                                             }
                                             break;
+
                                         case Aggregate.None:
                                         default:
                                             break;

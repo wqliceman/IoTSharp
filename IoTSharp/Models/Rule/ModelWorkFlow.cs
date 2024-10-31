@@ -10,8 +10,6 @@ namespace IoTSharp.Models.Rule
         public string Biz { get; set; }
     }
 
-
-
     public class ModelDiagram
     {
         public List<NodeObject> nodes { get; set; }
@@ -20,8 +18,6 @@ namespace IoTSharp.Models.Rule
 
         public Guid RuleId { get; set; }
     }
-
-
 
     public class LineObject
     {
@@ -33,8 +29,6 @@ namespace IoTSharp.Models.Rule
         public string linenamespace { get; set; }
     }
 
-
-
     public class NodeObject
     {
         public string nodeId { get; set; }
@@ -43,12 +37,14 @@ namespace IoTSharp.Models.Rule
         /// </summary>
 
         public string nodetype { get; set; }
+
         /// <summary>
         /// 节点内容（脚本时为脚本内容，执行器时为配置）
         /// </summary>
         public string content { get; set; }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string mata { get; set; }
 

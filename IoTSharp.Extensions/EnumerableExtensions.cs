@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace IoTSharp.Extensions
 {
@@ -76,6 +75,7 @@ namespace IoTSharp.Extensions
         {
             return iEnumberable.ToJson().ToDataTable();
         }
+
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> items, int size)
         {
             T[] array = items as T[] ?? items.ToArray();
@@ -86,6 +86,7 @@ namespace IoTSharp.Extensions
                 yield return chunk;
             }
         }
+
         public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> source, int chunkSize)
         {
             if (source == null)
@@ -117,7 +118,8 @@ namespace IoTSharp.Extensions
                 }
             }
         }
-        public static List<List<T>> Split2<T>(this List<T> source,int size)
+
+        public static List<List<T>> Split2<T>(this List<T> source, int size)
         {
             return source
                 .Select((x, i) => new { Index = i, Value = x })
@@ -125,6 +127,7 @@ namespace IoTSharp.Extensions
                 .Select(x => x.Select(v => v.Value).ToList())
                 .ToList();
         }
+
         public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int len)
         {
             if (len == 0)
@@ -155,7 +158,7 @@ namespace IoTSharp.Extensions
         {
             var chunk = new List<T>(chunksize);
             List<List<T>> _source = new List<List<T>>();
-            _source.Add( source);
+            _source.Add(source);
             foreach (var element in _source.SelectMany(s => s))
             {
                 if (chunksize == chunk.Count)

@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Figgle;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Figgle;
+using System;
 
 namespace IoTSharp
 {
     public class Program
     {
-
         public static void Main(string[] args)
         {
             Console.WriteLine(FiggleFonts.Doom.Render("IoTSharp"));
@@ -26,6 +20,5 @@ namespace IoTSharp
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-              
     }
 }

@@ -1,7 +1,7 @@
-﻿using IoTSharp.EventBus;
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Dtos;
+using IoTSharp.EventBus;
 using IoTSharp.Extensions;
 using IoTSharp.Gateways;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections;
-using IdentityModel.OidcClient;
 
 namespace IoTSharp.Services.MQTTControllers
 {
@@ -233,13 +231,11 @@ namespace IoTSharp.Services.MQTTControllers
                     await BadMessage();
                     _logger.LogWarning($"调用KepServerEx网关时未找到设备");
                 }
-
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"调用KepServerEx失败:{ex.Message}");
             }
-   
         }
     }
 }

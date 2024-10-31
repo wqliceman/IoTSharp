@@ -1,9 +1,5 @@
 ﻿using IoTSharp.Contracts;
-using IoTSharp.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Dtos
 {
@@ -18,6 +14,7 @@ namespace IoTSharp.Dtos
 
         public Guid? ProductId { get; set; }
     }
+
     public class DevicePostProduceDto
     {
         public string Name { get; set; }

@@ -1,5 +1,5 @@
-﻿using System;
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
+using System;
 
 namespace IoTSharp.Dtos
 {
@@ -9,6 +9,7 @@ namespace IoTSharp.Dtos
         /// 用户ID
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// 用户锁定操作
         /// </summary>

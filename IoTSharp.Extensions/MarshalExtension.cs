@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace System.Runtime.InteropServices
+﻿namespace System.Runtime.InteropServices
 {
     public static class MarshalExtension
     {
@@ -19,6 +12,7 @@ namespace System.Runtime.InteropServices
             Marshal.FreeHGlobal(buffer); //释放内存
             return rawdatas;
         }
+
         public static T ToStruct<T>(this byte[] rawdatas) where T : struct
         {
             var t = default(T);

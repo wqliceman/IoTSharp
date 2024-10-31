@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
@@ -13,6 +9,7 @@ namespace IoTSharp.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long FormId { get; set; }
+
         public long BizId { get; set; }
         public long FormCreator { get; set; }
         public string FormName { get; set; }
@@ -23,7 +20,7 @@ namespace IoTSharp.Data
         public string Url { get; set; }
         public Guid Creator { get; set; }
         public DateTime? FromCreateDate { get; set; }
-        public string FormLayout { get; set; } 
+        public string FormLayout { get; set; }
         public bool IsCompact { get; set; }
         public Tenant Tenant { get; set; }
         public Customer Customer { get; set; }

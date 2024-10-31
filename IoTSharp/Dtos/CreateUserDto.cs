@@ -24,10 +24,10 @@ namespace IoTSharp.Dtos
         /// </summary>
         [Phone]
         public string PhoneNumber { get; set; }
+
         /// <summary>
         /// 客户的ID
         /// </summary>
         public Guid Customer { get; set; }
-
     }
 }

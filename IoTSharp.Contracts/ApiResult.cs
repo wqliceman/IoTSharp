@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace IoTSharp.Contracts
+﻿namespace IoTSharp.Contracts
 {
     public class ApiResult
     {
@@ -27,6 +22,7 @@ namespace IoTSharp.Contracts
         {
             Data = default;
         }
+
         public ApiResult(T data)
         {
             Data = data;

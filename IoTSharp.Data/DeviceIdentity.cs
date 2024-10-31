@@ -1,9 +1,6 @@
 ﻿using IoTSharp.Contracts;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
@@ -14,6 +11,7 @@ namespace IoTSharp.Data
         /// </summary>
         [Key]
         public Guid Id { get; set; }
+
         /// <summary>
         /// 认证方式类型
         /// </summary>
@@ -35,11 +33,12 @@ namespace IoTSharp.Data
         /// When <see cref="IdentityType"/> Is <see cref="IdentityType.X509Certificate"/> ,this is X509 Certificate' PEM.
         /// </summary>
         public string IdentityValue { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         [Required]
         public Device Device { get; set; }
-        
+
         public Guid DeviceId { get; set; }
     }
 }

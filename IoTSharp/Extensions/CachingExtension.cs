@@ -11,8 +11,6 @@ namespace IoTSharp.Extensions
     {
         public static HomeKanbanDto GetKanBanCache(this IEasyCachingProvider _caching, Guid tid, ApplicationDbContext _context)
         {
-
-
             var today = DateTime.Today.ToUniversalTime();
             var kbc = _caching.Get($"{nameof(HomeKanbanDto)}{tid}", () =>
             {

@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using IoTSharp.Contracts;
+using IoTSharp.Data.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using IoTSharp.Data.Configurations;
-using IoTSharp.Contracts;
 
 namespace IoTSharp.Data
 {
@@ -18,10 +14,8 @@ namespace IoTSharp.Data
         {
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        
             modelBuilder.ApplyConfiguration(new DataStorageConfiguration());
             modelBuilder.Entity<AttributeLatest>().HasDiscriminator<DataCatalog>(nameof(Data.DataStorage.Catalog));
             modelBuilder.Entity<TelemetryLatest>().HasDiscriminator<DataCatalog>(nameof(Data.DataStorage.Catalog));
@@ -30,7 +24,7 @@ namespace IoTSharp.Data
             modelBuilder.Entity<Device>().HasOne(c => c.DeviceIdentity).WithOne(c => c.Device).HasForeignKey<DeviceIdentity>(c => c.DeviceId);
             modelBuilder.Entity<Device>().HasDiscriminator<DeviceType>(nameof(Data.Device.DeviceType)).HasValue<Gateway>(DeviceType.Gateway).HasValue<Device>(DeviceType.Device);
             modelBuilder.Entity<Gateway>().HasDiscriminator<DeviceType>(nameof(Data.Device.DeviceType));
- ;
+            ;
 
             var builder_options = this.GetService<IDataBaseModelBuilderOptions>();
             builder_options.Infrastructure = this;
@@ -87,11 +81,10 @@ namespace IoTSharp.Data
         public DbSet<Alarm> Alarms { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<AssetRelation> AssetRelations { get; set; }
-        public DbSet<Produce>  Produces { get; set; }
+        public DbSet<Produce> Produces { get; set; }
 
-        public DbSet<ProduceData>  ProduceDatas { get; set; }
+        public DbSet<ProduceData> ProduceDatas { get; set; }
 
         public DbSet<ProduceDictionary> ProduceDictionaries { get; set; }
     }
-
 }

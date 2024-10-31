@@ -1,15 +1,8 @@
 ﻿using EasyCaching.Core;
-using IoTSharp.Contracts;
-using IoTSharp.Data;
 using IoTSharp.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Shashlik.EventBus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.EventBus.Shashlik
 {
@@ -19,10 +12,7 @@ namespace IoTSharp.EventBus.Shashlik
            , IStorage storage, IEasyCachingProviderFactory factory, EventBusOption eventBusOption
             ) : base(logger, scopeFactor, storage, factory, eventBusOption)
         {
-
         }
-
-      
     }
 
     public class EventAttributeDataHandler : IEventHandler<AttributeDataEvent>
@@ -33,6 +23,7 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(AttributeDataEvent @event, IDictionary<string, string> items)
         {
             var data = @event.Data;
@@ -48,6 +39,7 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(TelemetryDataEvent @event, IDictionary<string, string> items)
         {
             var data = @event.Data;
@@ -63,6 +55,7 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(AlarmEvent @event, IDictionary<string, string> items)
         {
             var data = @event.Data;
@@ -70,7 +63,6 @@ namespace IoTSharp.EventBus.Shashlik
         }
     }
 
-   
     public class CreateDeviceEventHandler : IEventHandler<CreateDeviceEvent>
     {
         private readonly ISubscriber _subscriber;
@@ -79,12 +71,12 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(CreateDeviceEvent @event, IDictionary<string, string> items)
         {
             await _subscriber.CreateDevice(@event.DeviceId);
         }
     }
-
 
     public class DeleteDeviceEventHandler : IEventHandler<DeleteDeviceEvent>
     {
@@ -94,11 +86,13 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(DeleteDeviceEvent @event, IDictionary<string, string> items)
         {
             await _subscriber.DeleteDevice(@event.DeviceId);
         }
     }
+
     public class DeviceConnectEventHandler : IEventHandler<DeviceConnectEvent>
     {
         private readonly ISubscriber _subscriber;
@@ -107,6 +101,7 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(DeviceConnectEvent @event, IDictionary<string, string> items)
         {
             var data = @event.Data;
@@ -114,6 +109,7 @@ namespace IoTSharp.EventBus.Shashlik
                 await _subscriber.Connect(data.DeviceId, data.ConnectStatus);
         }
     }
+
     public class DeviceActivityEventHandler : IEventHandler<DeviceActivityEvent>
     {
         private readonly ISubscriber _subscriber;
@@ -122,6 +118,7 @@ namespace IoTSharp.EventBus.Shashlik
         {
             _subscriber = subscriber;
         }
+
         public async Task Execute(DeviceActivityEvent @event, IDictionary<string, string> items)
         {
             var data = @event.Data;

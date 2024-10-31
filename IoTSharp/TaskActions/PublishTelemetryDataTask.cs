@@ -1,14 +1,9 @@
-﻿using IoTSharp.EventBus;
-using IoTSharp.Contracts;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using IoTSharp.Extensions;
-using IoTSharp.TaskActions;
-using Newtonsoft.Json;
+using IoTSharp.EventBus;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace IoTSharp.TaskActions
@@ -26,10 +21,10 @@ namespace IoTSharp.TaskActions
 
         public override Task<TaskActionOutput> ExecuteAsync(TaskActionInput param)
         {
-            var result = new TaskActionOutput() { DynamicOutput = new { code =  ApiCode.Success,msg="OK" } };
+            var result = new TaskActionOutput() { DynamicOutput = new { code = ApiCode.Success, msg = "OK" } };
             try
             {
-                var msg = new PlayloadData() {  MsgBody = JToken.Parse(param.Input)?.JsonToDictionary(), DataCatalog = DataCatalog.TelemetryData, DataSide = DataSide.ClientSide, DeviceId = param.DeviceId };
+                var msg = new PlayloadData() { MsgBody = JToken.Parse(param.Input)?.JsonToDictionary(), DataCatalog = DataCatalog.TelemetryData, DataSide = DataSide.ClientSide, DeviceId = param.DeviceId };
                 if (msg.DeviceId != Guid.Empty && msg.MsgBody?.Count > 0)
                 {
                     _queue.PublishTelemetryData(msg);

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Extensions
 {
@@ -18,6 +15,7 @@ namespace IoTSharp.Extensions
                    t.Equals(typeof(Guid)) ||
                    t.Equals(typeof(byte[])) || t.Equals(typeof(char[]));
         }
+
         public static bool IsTupleType(this Type type, bool checkBaseTypes = false)
         {
             if (type == null)

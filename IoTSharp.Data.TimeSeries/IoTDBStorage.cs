@@ -3,15 +3,9 @@ using Apache.IoTDB.DataStructure;
 using IoTSharp.Contracts;
 using IoTSharp.Data;
 using IoTSharp.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace IoTSharp.Storage
 {
@@ -19,9 +13,9 @@ namespace IoTSharp.Storage
     {
         private readonly AppSettings _appSettings;
         private readonly ILogger _logger;
-        private readonly  Apache.IoTDB.SessionPool   _session;
+        private readonly Apache.IoTDB.SessionPool _session;
         private readonly IoTDBConnection _ioTDB;
-        private string _StorageGroupName=string.Empty;
+        private string _StorageGroupName = string.Empty;
         public IoTDBStorage(ILogger<IoTDBStorage> logger, IOptions<AppSettings> options, IoTDBConnection ioTDB
             )
         {
@@ -29,7 +23,6 @@ namespace IoTSharp.Storage
             _logger = logger;
             _session = ioTDB.SessionPool;
             _ioTDB = ioTDB;
-          
         }
         public async Task<bool> CheckTelemetryStorage()
         {
@@ -76,9 +69,8 @@ namespace IoTSharp.Storage
             }
             return _ok;
         }
-      
 
-        private async Task<List<MapItem>> GetIotDbMeasurementPointInfor(string device,string measureKeys="*")
+        private async Task<List<MapItem>> GetIotDbMeasurementPointInfor(string device, string measureKeys = "*")
         {
             //show timeseries root.iotsharp.8984003f7016487db7f26528b246198f.**\
             var keylist = measureKeys.Split(';', ',').ToList();
@@ -90,7 +82,7 @@ namespace IoTSharp.Storage
                 var next = query.Next();
                 var values = next.Values;
                 var measurePointName = values?[0]?.ToString()?.Replace(@$"{device}.", "");
-                var  _value = values?[3]  as string ;
+                var _value = values?[3] as string;
                 if (!string.IsNullOrEmpty(measurePointName) && !string.IsNullOrEmpty(_value))
                 {
                     var _v = new MapItem(measurePointName, _value);
@@ -100,7 +92,7 @@ namespace IoTSharp.Storage
             }
             return dt;
         }
-        private dynamic? GetIotSharpValue(object v,string iotDataType)
+        private dynamic? GetIotSharpValue(object v, string iotDataType)
         {
             dynamic? result = null;
             if (v != null && (v.ToString()?.ToUpper()) != "NULL")
@@ -110,28 +102,34 @@ namespace IoTSharp.Storage
                     case "DOUBLE":
                         result = Convert.ToDouble(v);
                         break;
+
                     case "FLOAT":
                         result = Convert.ToSingle(v);
                         break;
+
                     case "TEXT":
                         result = Convert.ToString(v);
                         break;
+
                     case "INT64":
                         result = Convert.ToInt64(v);
                         break;
+
                     case "IN32":
                         result = Convert.ToInt32(v);
                         break;
+
                     case "BOOLEAN":
                         result = Convert.ToBoolean(v);
                         break;
+
                     default:
                         throw new Exception($"不支持的IotDB数据类型：{iotDataType}");
                 }
             }
             return result;
         }
-        private  DataType GetIoTSharpDataType(string iotDataType)
+        private DataType GetIoTSharpDataType(string iotDataType)
         {
             string _iot_dt_up = iotDataType.ToUpper();
             return _iot_dt_up switch
@@ -146,13 +144,10 @@ namespace IoTSharp.Storage
             };
         }
 
-
         public async Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId)
         {
-            return await GetTelemetryLatest(deviceId,"*");
+            return await GetTelemetryLatest(deviceId, "*");
         }
-
-
 
         /// <summary>
         /// 将IotSharp中的聚合转换为IotDB中的聚合函数名称
@@ -165,23 +160,29 @@ namespace IoTSharp.Storage
             switch (aggregate)
             {
                 case Aggregate.Mean:
-                    result= "AVG";
+                    result = "AVG";
                     break;
+
                 case Aggregate.Last:
-                    result= "LAST_VALUE";
+                    result = "LAST_VALUE";
                     break;
+
                 case Aggregate.First:
-                    result= "FIRST_VALUE";
+                    result = "FIRST_VALUE";
                     break;
+
                 case Aggregate.Max:
-                    result= "MAX_VALUE";
+                    result = "MAX_VALUE";
                     break;
+
                 case Aggregate.Min:
-                    result= "MIN_VALUE";
+                    result = "MIN_VALUE";
                     break;
+
                 case Aggregate.Sum:
-                    result= "SUM";
+                    result = "SUM";
                     break;
+
                 case Aggregate.None:
                 default:
                     result = "ALL";
@@ -215,7 +216,7 @@ namespace IoTSharp.Storage
                 }
 
                 _logger.LogInformation(sb.ToString());
-                 var query = await _session.ExecuteQueryStatementAsync(sb.ToString());
+                var query = await _session.ExecuteQueryStatementAsync(sb.ToString());
                 while (query.HasNext())
                 {
                     var next = query.Next();
@@ -237,35 +238,29 @@ namespace IoTSharp.Storage
                         }
                     }
                 }
-
             }
-
 
             return dt;
         }
 
-
-
         public async Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId, string keys)
         {
-
             string device = $"root.{_StorageGroupName}.{deviceId:N}";
             if (string.IsNullOrEmpty(keys))
                 keys = "*";
             var selectItemStr = string.Join(",", from m in keys.Split(',') select $"last({m})");
 
             var sql = $"select {selectItemStr} from {device}";
-            
+
             List<TelemetryDataDto> dt = new List<TelemetryDataDto>();
-             var query = await _session.ExecuteQueryStatementAsync(sql);
+            var query = await _session.ExecuteQueryStatementAsync(sql);
 
             while (query.HasNext())
             {
-
                 var next = query.Next();
                 var values = next.Values;
                 var time = next.GetDateTime();
-                if (values != null && values.Count>=3)
+                if (values != null && values.Count >= 3)
                 {
                     var _iottype = values[2] as string;
                     var _keyname = values[0]?.ToString()?.Replace($"{device}.", "");
@@ -285,10 +280,8 @@ namespace IoTSharp.Storage
                         }
                     }
                 }
-
             }
             return dt;
-
         }
 
         public async Task<(bool result, List<TelemetryData> telemetries)> StoreTelemetryAsync(PlayloadData msg)
@@ -313,17 +306,21 @@ namespace IoTSharp.Storage
                                 _value = tdata.Value_Boolean;
                                 _hasvalue = tdata.Value_Boolean.HasValue;
                                 break;
+
                             case DataType.String:
                                 _value = tdata.Value_String;
                                 break;
+
                             case DataType.Long:
                                 _value = tdata.Value_Long;
                                 _hasvalue = tdata.Value_Long.HasValue;
                                 break;
+
                             case DataType.Double:
                                 _value = tdata.Value_Double;
                                 _hasvalue = tdata.Value_Double.HasValue;
                                 break;
+
                             case DataType.DateTime:
                                 _value = tdata.Value_DateTime;
                                 _hasvalue = tdata.Value_DateTime.HasValue;

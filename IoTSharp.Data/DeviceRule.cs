@@ -7,6 +7,7 @@ namespace IoTSharp.Data
     {
         [Key]
         public Guid DeviceRuleId { get; set; }
+
         public Device Device { get; set; }
         public FlowRule FlowRule { get; set; }
         public Guid ConfigUser { get; set; }

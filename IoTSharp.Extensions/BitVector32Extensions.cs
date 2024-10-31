@@ -9,9 +9,9 @@ namespace IoTSharp.Extensions
     [System.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = true)]
     public sealed class BitSectionAttribute : Attribute
     {
-        // See the attribute guidelines at 
+        // See the attribute guidelines at
         //  http://go.microsoft.com/fwlink/?LinkId=85236
-        readonly short _len;
+        private readonly short _len;
 
         // This is a positional argument
         public BitSectionAttribute(short len)
@@ -23,12 +23,13 @@ namespace IoTSharp.Extensions
         {
             get { return _len; }
         }
+
         public int Index { get; set; }
         internal BitVector32.Section Section { get; set; }
     }
+
     public static class BitVector32Extensions
     {
-
         /// <summary>
         /// 取高位值
         /// </summary>
@@ -39,8 +40,8 @@ namespace IoTSharp.Extensions
             BitVector32 vector32 = new BitVector32(value);
             BitVector32.Section _58_height = BitVector32.CreateSection(0xf, BitVector32.CreateSection(0xf));
             return vector32[_58_height];
-
         }
+
         /// <summary>
         /// 去低位值
         /// </summary>
@@ -73,7 +74,6 @@ namespace IoTSharp.Extensions
                 if (i == 0)
                 {
                     bsa.Section = BitVector32.CreateSection((short)(Math.Pow(2, bsa.Len) - bsa.Len));
-
                 }
                 else
                 {
@@ -83,6 +83,7 @@ namespace IoTSharp.Extensions
             }
             return warn;
         }
+
         public static T? To<T>(this BitVector32 vector32) where T : class, new()
         {
             T? warn = new();

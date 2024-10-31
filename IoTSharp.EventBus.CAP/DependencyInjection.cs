@@ -1,23 +1,12 @@
-﻿
-using DotNetCore.CAP;
-using DotNetCore.CAP.Dashboard;
+﻿using IoTSharp.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Client;
 using Savorboard.CAP.InMemoryMessageQueue;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
-using static IoTSharp.EventBus.EventBusOption;
 
 namespace IoTSharp.EventBus.CAP
 {
     public static class DependencyInjection
     {
-
         public static IApplicationBuilder UseCAPEventBus(this IApplicationBuilder app)
         {
             var provider = app.ApplicationServices;
@@ -25,7 +14,7 @@ namespace IoTSharp.EventBus.CAP
             return app;
         }
 
-        public static void UserCAP(this EventBusOption  opt)
+        public static void UserCAP(this EventBusOption opt)
         {
             var settings = opt.AppSettings;
             var healthChecks = opt.HealthChecks;
@@ -54,12 +43,15 @@ namespace IoTSharp.EventBus.CAP
                     case EventBusStore.LiteDB:
                         x.UseLiteDBStorage(_EventBusStore);
                         break;
+
                     case EventBusStore.MySql:
                         x.UseMySql(_EventBusStore);
                         break;
+
                     case EventBusStore.SqlServer:
                         x.UseSqlServer(_EventBusStore);
                         break;
+
                     case EventBusStore.InMemory:
                     default:
                         x.UseInMemoryStorage();
@@ -79,7 +71,7 @@ namespace IoTSharp.EventBus.CAP
                             };
                         });
                         //amqp://guest:guest@localhost:5672
-                        healthChecks.AddRabbitMQ(_EventBusMQ,name: _hc_EventBusMQ);
+                        healthChecks.AddRabbitMQ(_EventBusMQ, name: _hc_EventBusMQ);
                         break;
 
                     case EventBusMQ.Kafka:
@@ -97,9 +89,11 @@ namespace IoTSharp.EventBus.CAP
                             cfg.Pattern = MaiKeBing.CAP.NetMQPattern.PushPull;
                         });
                         break;
+
                     case EventBusMQ.AzureServiceBus:
                         x.UseAzureServiceBus(_EventBusMQ);
                         break;
+
                     case EventBusMQ.AmazonSQS:
                         x.UseAmazonSQS(opts =>
                         {
@@ -112,15 +106,19 @@ namespace IoTSharp.EventBus.CAP
                             opts.Region = Amazon.RegionEndpoint.GetBySystemName(uri.Host);
                         });
                         break;
+
                     case EventBusMQ.RedisStreams:
                         x.UseRedis(_EventBusMQ);
                         break;
+
                     case EventBusMQ.NATS:
                         x.UseNATS(_EventBusMQ);
                         break;
+
                     case EventBusMQ.Pulsar:
                         x.UsePulsar(_EventBusMQ);
                         break;
+
                     case EventBusMQ.InMemory:
                     default:
                         x.UseInMemoryMessageQueue();
@@ -130,7 +128,5 @@ namespace IoTSharp.EventBus.CAP
                 //x.UseDiscovery();
             });
         }
-
-        
     }
 }

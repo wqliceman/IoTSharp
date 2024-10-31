@@ -1,7 +1,4 @@
-﻿ 
-using System;
-
-namespace IoTSharp.Contracts
+﻿namespace IoTSharp.Contracts
 {
     public class DeviceAlarmDto
     {
@@ -27,14 +24,13 @@ namespace IoTSharp.Contracts
         /// </summary>
         public ServerityLevel Serverity { get; set; } = ServerityLevel.Indeterminate;
 
-
         public Guid warnDataId { get; set; }
     }
 
     public class CreateAlarmDto : DeviceAlarmDto
     {
-
         public DateTime CreateDateTime { get; set; }
+
         /// <summary>
         /// 起因设备类型
         /// </summary>
@@ -103,14 +99,10 @@ namespace IoTSharp.Contracts
         public object Originator { get; set; }
     }
 
-
     public class AlarmStatusDto
     {
         public Guid Id { get; set; }
 
         public AlarmStatus AlarmStatus { get; set; }
-
     }
-
-    
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace IoTSharp.Models
 {
@@ -15,10 +12,10 @@ namespace IoTSharp.Models
         /// 数据总量
         /// </summary>
         public long total { get; set; }
+
         /// <summary>
         /// 一页数据
         /// </summary>
         public List<T> rows { get; set; }
-
     }
 }

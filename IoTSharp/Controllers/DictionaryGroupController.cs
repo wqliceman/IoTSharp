@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IoTSharp.Contracts;
+using IoTSharp.Controllers.Models;
+using IoTSharp.Data;
+using IoTSharp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using IoTSharp.Controllers.Models;
-using IoTSharp.Data;
-using IoTSharp.Dtos;
-using IoTSharp.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using IoTSharp.Contracts;
 
 namespace IoTSharp.Controllers
 {
@@ -21,7 +17,6 @@ namespace IoTSharp.Controllers
     [Authorize]
     public class DictionaryGroupController : ControllerBase
     {
-
         private ApplicationDbContext _context;
         private UserManager<IdentityUser> _userManager;
 
@@ -31,11 +26,9 @@ namespace IoTSharp.Controllers
             this._context = context;
         }
 
-
         [HttpPost]
         public ApiResult<PagedData<BaseDictionaryGroup>> Index([FromBody] QueryDto m)
         {
-
             Expression<Func<BaseDictionaryGroup, bool>> condition = x => x.DictionaryGroupStatus > -1;
             var result = _context.BaseDictionaryGroups.Where(condition)
                 .OrderByDescending(c => c.DictionaryGroupId).Skip((m.Offset) * m.Limit).Take(m.Limit).ToList();
@@ -56,10 +49,7 @@ namespace IoTSharp.Controllers
                 return new ApiResult<BaseDictionaryGroup>(ApiCode.Success, "OK", dictionaryGroup);
             }
             return new ApiResult<BaseDictionaryGroup>(ApiCode.Success, "can't find this object", null);
-
-
         }
-
 
         [HttpGet]
         public ApiResult<bool> SetStatus(int id)
@@ -75,14 +65,8 @@ namespace IoTSharp.Controllers
             return new ApiResult<bool>(ApiCode.Success, "can't find this object", false);
         }
 
-
-
-
-
-
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
@@ -98,13 +82,13 @@ namespace IoTSharp.Controllers
                 DictionaryGroupValueTypeName = m.DictionaryGroupValueTypeName,
                 DictionaryGroupDesc = m.DictionaryGroupDesc,
                 DictionaryGroupId = m.DictionaryGroupId
-
             };
 
             _context.BaseDictionaryGroups.Add(dictionaryGroup);
             _context.SaveChanges();
             return new ApiResult<bool>(ApiCode.Success, "OK", true);
         }
+
         [HttpPost]
         public ApiResult<bool> Update(BaseDictionaryGroup m)
         {
@@ -122,14 +106,12 @@ namespace IoTSharp.Controllers
                 _context.SaveChanges();
 
                 return new ApiResult<bool>(ApiCode.Success, "OK", true);
-
             }
             return new ApiResult<bool>(ApiCode.Success, "can't find this object", false);
-
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -140,7 +122,6 @@ namespace IoTSharp.Controllers
 
             if (dictionaryGroup != null)
             {
-
                 dictionaryGroup.DictionaryGroupStatus = -1;
                 _context.BaseDictionaryGroups.Update(dictionaryGroup);
                 _context.SaveChanges();
@@ -148,7 +129,5 @@ namespace IoTSharp.Controllers
             }
             return new ApiResult<bool>(ApiCode.Success, "can't find this object", false);
         }
-
-
     }
 }

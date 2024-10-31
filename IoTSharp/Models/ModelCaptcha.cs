@@ -9,9 +9,9 @@
 
         public string BigImage { get; set; }
     }
+
     public class ModelCaptchaVertify
     {
-
         public int move { get; set; }
 
         public int[] action { get; set; }
@@ -21,8 +21,5 @@
     {
         public int Move { get; set; }
         public string Clientid { get; set; }
-
     }
-
-
 }

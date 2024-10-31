@@ -1,18 +1,15 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace IoTSharp.Extensions
 {
     public static class XmlExtensions
     {
-
         public static bool XML2Json(System.IO.MemoryStream xml, out object obj)
         {
             bool ok = false;
@@ -90,6 +87,7 @@ namespace IoTSharp.Extensions
                 return false;
             }
         }
+
         public static List<T> ToList<T>(this List<System.Xml.Linq.XElement> _Nodes)
         {
             if (_Nodes == null)
@@ -108,7 +106,6 @@ namespace IoTSharp.Extensions
             }
             catch (Exception)
             {
-
             }
             return ts;
         }

@@ -104,8 +104,8 @@
              NotFoundUser = 10021,
              CanNotLockUser = 10022,
             LockUserHaveError = 10023
-            CanNotLockYourself =10028 
-            CanNotUnlockYourself =10029 
+            CanNotLockYourself =10028
+            CanNotUnlockYourself =10029
             </returns>
         </member>
         <member name="M:IoTSharp.Controllers.AccountController.Modify(IoTSharp.Dtos.UserItemDto)">
@@ -550,18 +550,18 @@
              <returns></returns>
         </member>
         <member name="M:IoTSharp.Controllers.DictionaryGroupController.Save(IoTSharp.Data.BaseDictionaryGroup)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="m"></param>
-            <returns></returns>
+             </summary>
+             <param name="m"></param>
+             <returns></returns>
         </member>
         <member name="M:IoTSharp.Controllers.DictionaryGroupController.Delete(System.Int32)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
+             </summary>
+             <param name="id"></param>
+             <returns></returns>
         </member>
         <member name="M:IoTSharp.Controllers.DynamicFormInfoController.Save(IoTSharp.Data.DynamicFormInfo)">
              <summary>
@@ -594,7 +594,7 @@
         </member>
         <member name="M:IoTSharp.Controllers.InstallerController.CreateRootCertificate">
             <summary>
-            域名可以不配置， 默认会使用机器名  
+            域名可以不配置， 默认会使用机器名
             </summary>
             <returns></returns>
         </member>
@@ -629,11 +629,11 @@
             <returns></returns>
         </member>
         <member name="M:IoTSharp.Controllers.ProducesController.ProduceDatas(System.Guid)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="produceid"></param>
-            <returns></returns>
+             </summary>
+             <param name="produceid"></param>
+             <returns></returns>
         </member>
         <member name="M:IoTSharp.Controllers.ProducesController.Get(System.Guid)">
             <summary>
@@ -850,7 +850,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.RegisterDto.Email">
             <summary>
-            邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。 
+            邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.RegisterDto.PhoneNumber">
@@ -945,7 +945,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.CreateUserInput.Email">
             <summary>
-            邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。 
+            邮箱地址， 也是用户名，一个邮箱只能注册平台的一个客户，如果你在平台有两个租户都有账号，则需要两个邮箱地址。
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.CreateUserInput.PhoneNumber">
@@ -954,9 +954,9 @@
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.CreateUserInput.CustomerId">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.CreateUserInput.Password">
             <summary>
@@ -975,7 +975,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.DeviceDetailDto.Timeout">
             <summary>
-            超时时间 秒数 
+            超时时间 秒数
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.DeviceDetailDto.Owner">
@@ -1060,7 +1060,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.InstanceDto.Domain">
             <summary>
-            http://localhost/  
+            http://localhost/
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.LockDto.Id">
@@ -1080,7 +1080,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.ProduceAddDto.Icon">
             <summary>
-            ICON file full path 
+            ICON file full path
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.ProduceAddDto.GatewayType">
@@ -1090,8 +1090,8 @@
         </member>
         <member name="P:IoTSharp.Dtos.ProduceAddDto.GatewayConfiguration">
             <summary>
-            网关配置信息， 如果是Unknow 则不使用， 如果是自定义 ，则这里是json字符串。 
-            如果是其他对应的网关， 则这里是 对应的配置文件名。 
+            网关配置信息， 如果是Unknow 则不使用， 如果是自定义 ，则这里是json字符串。
+            如果是其他对应的网关， 则这里是 对应的配置文件名。
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.ProduceAddDto.DefaultTimeout">
@@ -1176,7 +1176,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.ProduceDictionaryItemDto.DataType">
             <summary>
-            数据类型 
+            数据类型
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.ProduceDto.DefaultDeviceType">
@@ -1201,7 +1201,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.TelemetryDataQueryDto.end">
             <summary>
-            截止时间， 默认为现在。 
+            截止时间， 默认为现在。
             </summary>
         </member>
         <member name="P:IoTSharp.Dtos.TelemetryDataQueryDto.every">
@@ -1213,7 +1213,7 @@
         </member>
         <member name="P:IoTSharp.Dtos.TelemetryDataQueryDto.aggregate">
             <summary>
-            数据截面计算方式， 
+            数据截面计算方式，
             </summary>
         </member>
         <member name="F:IoTSharp.Dtos.TimespanConverterNewtonsoft.TimeSpanFormatString">
@@ -1377,14 +1377,14 @@
             <returns></returns>
         </member>
         <member name="M:IoTSharp.IoTSharpExtension.AddJWTSecurity(NSwag.Generation.AspNetCore.AspNetCoreOpenApiDocumentGeneratorSettings)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="configure"></param>
+             </summary>
+             <param name="configure"></param>
         </member>
         <member name="M:IoTSharp.IoTSharpExtension.JudgeOrCreateNewDevice(IoTSharp.Data.Device,System.String,Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Logging.ILogger)">
             <summary>
-            创建网关的子设备。 
+            创建网关的子设备。
             </summary>
             <param name="device">父设备</param>
             <param name="devname">子设备名称</param>
@@ -1425,19 +1425,19 @@
             </summary>
         </member>
         <member name="P:IoTSharp.Gateways.OPCUATag.TagValue">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:IoTSharp.Gateways.OPCUATag.TagQuality">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:IoTSharp.Gateways.OPCUATag.TagTimestamp">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:IoTSharp.Models.ModelAddAssetDevice.AssetId">
             <summary>
@@ -1481,7 +1481,7 @@
         </member>
         <member name="P:IoTSharp.Models.ModelEditAssetAttrItem.Id">
             <summary>
-             关联关系的id 
+             关联关系的id
             </summary>
         </member>
         <member name="P:IoTSharp.Models.ModelEditAssetAttrItem.Description">
@@ -1496,7 +1496,7 @@
         </member>
         <member name="P:IoTSharp.Models.ModelAssetAttrItem.Id">
             <summary>
-             关联关系的id 
+             关联关系的id
             </summary>
         </member>
         <member name="P:IoTSharp.Models.ModelAssetAttrItem.Description">
@@ -1581,9 +1581,9 @@
             </summary>
         </member>
         <member name="P:IoTSharp.Models.Rule.NodeObject.mata">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="T:IoTSharp.Properties.Resources">
             <summary>

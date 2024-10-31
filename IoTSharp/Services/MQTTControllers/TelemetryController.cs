@@ -1,17 +1,13 @@
-﻿using IoTSharp.EventBus;
-using EasyCaching.Core;
+﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using IoTSharp.Extensions;
-using IoTSharp.FlowRuleEngine;
+using IoTSharp.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IoTSharp.Contracts;
 
 namespace IoTSharp.Services.MQTTControllers
 {
@@ -27,11 +23,9 @@ namespace IoTSharp.Services.MQTTControllers
 
         public TelemetryController(ILogger<TelemetryController> logger, IServiceScopeFactory scopeFactor, IPublisher queue)
         {
-
             _logger = logger;
             _scopeFactor = scopeFactor;
             _queue = queue;
-
         }
 
         public string devname
@@ -92,7 +86,7 @@ namespace IoTSharp.Services.MQTTControllers
         {
             try
             {
-                if (Message.PayloadSegment.Count> 0)
+                if (Message.PayloadSegment.Count > 0)
                 {
                     var keyValues = Message.ConvertPayloadToDictionary();
                     _queue.PublishTelemetryData(device, keyValues);

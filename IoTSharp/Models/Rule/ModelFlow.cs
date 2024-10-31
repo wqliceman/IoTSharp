@@ -65,9 +65,7 @@ namespace IoTSharp.Models.Rule
         public string flowscripttype { get; set; }
 
         public BpmnObjectProfile profile { get; set; }
-
     }
-
 
     //from Parts.js
     public class BpmnObjectProfile
@@ -81,14 +79,5 @@ namespace IoTSharp.Models.Rule
         public dynamic config { get; set; }
         public string classname { get; set; }
         public string group { get; set; }
-
     }
-
-
-
-
-
-
-
-
 }

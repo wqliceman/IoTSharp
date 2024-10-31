@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
-using IoTSharp.Data;
+﻿using IoTSharp.Contracts;
+using System;
 
 namespace IoTSharp.Dtos
 {
@@ -16,7 +12,7 @@ namespace IoTSharp.Dtos
         public FlowRuleRunType Type { get; set; }
         public string MataData { get; set; }
         public Guid Creator { get; set; }
-   
+
         public string Bizid { get; set; }
         public DateTime CreaterDateTime { get; set; }
         public Guid RuleId { get; set; }

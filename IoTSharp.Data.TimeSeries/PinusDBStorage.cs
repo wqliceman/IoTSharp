@@ -1,31 +1,24 @@
 ﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using Microsoft.Extensions.DependencyInjection;
+using IoTSharp.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Microsoft.Extensions.Options;
 using PinusDB.Data;
-using System;
 using System.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IoTSharp.Extensions;
 
 namespace IoTSharp.Storage
 {
-
     public class PinusDBStorage : IStorage
     {
         private readonly ILogger _logger;
         private readonly ObjectPool<PinusConnection> _pinuspool;
+
         public PinusDBStorage(ILogger<PinusDBStorage> logger, ObjectPool<PinusConnection> pinuspool
             )
         {
             _logger = logger;
             _pinuspool = pinuspool;
         }
-
 
         public Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId)
         {
@@ -34,9 +27,8 @@ namespace IoTSharp.Storage
             List<TelemetryDataDto> dt = SqlToTDD(_pinus, sql, deviceId);
             _pinuspool.Return(_pinus);
             return Task.FromResult(dt);
-
-
         }
+
         /// <summary>
         /// 转换获取到的值
         /// </summary>
@@ -74,10 +66,10 @@ namespace IoTSharp.Storage
         public Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId, string keys)
         {
             PinusConnection _pinus = _pinuspool.Get();
-            List<TelemetryDataDto> dt = new List<TelemetryDataDto>() ;
+            List<TelemetryDataDto> dt = new List<TelemetryDataDto>();
             try
             {
-                string sql = $"select  devid,devname,expand  from sys_dev  where tabname='telemetrydata_{deviceId:N}' and   in ('{ string.Join("','", keys.Split(';', ','))}')";
+                string sql = $"select  devid,devname,expand  from sys_dev  where tabname='telemetrydata_{deviceId:N}' and   in ('{string.Join("','", keys.Split(';', ','))}')";
                 dt = SqlToTDD(_pinus, sql, deviceId);
             }
             catch (Exception ex)
@@ -90,9 +82,7 @@ namespace IoTSharp.Storage
             }
             _pinuspool.Return(_pinus);
             return Task.FromResult(dt);
-
         }
-         
 
         public Task<List<TelemetryDataDto>> LoadTelemetryAsync(Guid deviceId, string keys, DateTime begin, DateTime end, TimeSpan every, Aggregate aggregate)
         {
@@ -100,7 +90,7 @@ namespace IoTSharp.Storage
             List<TelemetryDataDto> dt = new List<TelemetryDataDto>();
             try
             {
-                string sql = $"select  devid,devname,expand  from sys_dev  where tabname='telemetrydata_{deviceId:N}' and   in ('{ string.Join("','", keys.Split(';', ','))}')";
+                string sql = $"select  devid,devname,expand  from sys_dev  where tabname='telemetrydata_{deviceId:N}' and   in ('{string.Join("','", keys.Split(';', ','))}')";
                 dt = SQLToDTByDate(begin, end, _pinus, sql, deviceId);
             }
             catch (Exception ex)
@@ -111,11 +101,10 @@ namespace IoTSharp.Storage
             {
                 _pinuspool.Return(_pinus);
             }
-          
-            return Task.FromResult(dt);
 
+            return Task.FromResult(dt);
         }
- 
+
         private List<TelemetryDataDto> SQLToDTByDate(DateTime begin, DateTime end, PinusConnection db, string sql, Guid devid)
         {
             List<TelemetryDataDto> dt = new List<TelemetryDataDto>();
@@ -144,10 +133,12 @@ namespace IoTSharp.Storage
             });
             return dt;
         }
+
         public Task<bool> CheckTelemetryStorage()
         {
             return Task.FromResult(true);
         }
+
         public Task<(bool result, List<TelemetryData> telemetries)> StoreTelemetryAsync(PlayloadData msg)
         {
             bool result = false;
@@ -167,7 +158,7 @@ namespace IoTSharp.Storage
                     if (kp.Value != null)
                     {
                         List<PinusParameter> parameters = new List<PinusParameter>();
-                        TelemetryData tdata = new TelemetryData() { DateTime =msg.ts, DeviceId = msg.DeviceId, KeyName = kp.Key, Value_DateTime = DateTime.UnixEpoch };
+                        TelemetryData tdata = new TelemetryData() { DateTime = msg.ts, DeviceId = msg.DeviceId, KeyName = kp.Key, Value_DateTime = DateTime.UnixEpoch };
                         tdata.FillKVToMe(kp);
                         string _type = "";
                         var cmd = _pinus.CreateCommand();
@@ -177,34 +168,42 @@ namespace IoTSharp.Storage
                                 _type = "value_boolean";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_Boolean));
                                 break;
+
                             case DataType.String:
                                 _type = "value_string";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_String));
                                 break;
+
                             case DataType.Long:
                                 _type = "value_long";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_Long));
                                 break;
+
                             case DataType.Double:
                                 _type = "value_double";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_Double));
                                 break;
+
                             case DataType.Json:
                                 _type = "value_string";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_String));
                                 break;
+
                             case DataType.XML:
                                 _type = "value_string";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_XML));
                                 break;
+
                             case DataType.Binary:
                                 _type = "value_string";
                                 cmd.Parameters.Add(new PinusParameter(_type, Hex.BytesToHex(tdata.Value_Binary)));
                                 break;
+
                             case DataType.DateTime:
                                 _type = "value_datetime";
                                 cmd.Parameters.Add(new PinusParameter(_type, tdata.Value_DateTime));
                                 break;
+
                             default:
                                 break;
                         }
@@ -229,9 +228,7 @@ namespace IoTSharp.Storage
                         }
                         telemetries.Add(tdata);
                     }
-                  
                 });
-
             }
             catch (Exception ex)
             {
@@ -245,6 +242,7 @@ namespace IoTSharp.Storage
         }
 
         private static string GetDevTableName(PlayloadData msg) => $"telemetrydata_{msg.DeviceId:N}";
+
         private static string GetDevTableName(Guid devid) => $"telemetrydata_{devid:N}";
 
         private long? GetKeyId(Guid devid, string keyname, PinusConnection _pinus)

@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IoTSharp.Contracts;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using IoTSharp.Contracts;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace IoTSharp.Data
 {
-    public class FlowRule:IJustMy
+    public class FlowRule : IJustMy
     {
         [Key] public Guid RuleId { get; set; }
         public RuleType RuleType { get; set; }
-        
-        [Required] 
+
+        [Required]
         public string Name { get; set; }
+
         public string Describes { get; set; }
         public string Runner { get; set; }
         public string ExecutableCode { get; set; }
@@ -33,6 +29,5 @@ namespace IoTSharp.Data
         public Tenant Tenant { get; set; }
 
         public Customer Customer { get; set; }
-
     }
 }

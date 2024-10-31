@@ -2,7 +2,6 @@
 
 namespace IoTSharp.Dtos
 {
-
     public class InstallDto
     {
         /// <summary>
@@ -17,26 +16,31 @@ namespace IoTSharp.Dtos
         /// </summary>
         [Required]
         public string CustomerName { get; set; }
+
         /// <summary>
         /// 系统管理员密码
         /// </summary>
         [Required]
         [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
         public string Password { get; set; }
+
         /// <summary>
         /// 租户姓名
         /// </summary>
         public string TenantName { get; set; }
+
         /// <summary>
         /// 租户邮箱
         /// </summary>
         [EmailAddress]
         public string TenantEMail { get; set; }
+
         /// <summary>
         /// 客户邮箱
         /// </summary>
         [EmailAddress]
         public string CustomerEMail { get; set; }
+
         /// <summary>
         /// 电话号码
         /// </summary>

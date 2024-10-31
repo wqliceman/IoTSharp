@@ -1,7 +1,6 @@
 ﻿using IoTSharp.Contracts;
 using IoTSharp.Controllers.Models;
 using IoTSharp.Data;
-using IoTSharp.Dtos;
 using IoTSharp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

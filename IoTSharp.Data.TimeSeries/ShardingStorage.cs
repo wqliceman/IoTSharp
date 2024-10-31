@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace IoTSharp.Storage
 {
@@ -26,7 +25,7 @@ namespace IoTSharp.Storage
 
         public Task<bool> CheckTelemetryStorage()
         {
-           return Task.FromResult( true );
+            return Task.FromResult(true);
         }
 
         public Task<List<TelemetryDataDto>> GetTelemetryLatest(Guid deviceId)
@@ -97,7 +96,7 @@ namespace IoTSharp.Storage
                         {
                             lst = kv.ToList();
                         }
-                        result= AggregateDataHelpers. AggregateData(lst,begin, end,  every, aggregate);
+                        result = AggregateDataHelpers.AggregateData(lst, begin, end, every, aggregate);
                     }
                 }
             }
@@ -120,7 +119,6 @@ namespace IoTSharp.Storage
 
                 using (var db = scope.ServiceProvider.GetRequiredService<ShardingDbContext>())
                 {
-              
                     var lst = new List<TelemetryData>();
                     msg.MsgBody.ToList().ForEach(kp =>
                                      {

@@ -1,10 +1,5 @@
 ﻿using IoTSharp.Contracts;
 using IoTSharp.Data;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IoTSharp.EventBus
 {
@@ -23,6 +18,7 @@ namespace IoTSharp.EventBus
         {
             _queue.PublishAttributeData(new PlayloadData() { DeviceId = device.Id, MsgBody = keyValues, DataSide = DataSide.ClientSide, DataCatalog = DataCatalog.AttributeData });
         }
+
         /// <summary>
         /// 发布属性数据
         /// </summary>
@@ -35,6 +31,7 @@ namespace IoTSharp.EventBus
             _data?.Invoke(dat);
             _queue.PublishAttributeData(dat);
         }
+
         /// <summary>
         /// 发布字典到遥测数据
         /// </summary>
@@ -45,6 +42,5 @@ namespace IoTSharp.EventBus
         {
             _queue.PublishTelemetryData(new PlayloadData() { DeviceId = device.Id, MsgBody = keyValues, DataSide = DataSide.ClientSide, DataCatalog = DataCatalog.TelemetryData });
         }
-
     }
 }

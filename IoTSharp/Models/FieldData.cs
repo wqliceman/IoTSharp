@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace IoTSharp.Controllers.Models
 {
@@ -13,9 +11,7 @@ namespace IoTSharp.Controllers.Models
         public int Id { get; set; }
 
         public FieldData[] propdata { get; set; }
-
     }
-
 
     public class FieldData
     {
@@ -34,13 +30,10 @@ namespace IoTSharp.Controllers.Models
         public string FieldUnit { get; set; }
     }
 
-
     public class DynamicProp
     {
-
         public static object GetValue(int type, JToken target)
         {
-
             switch (type)
             {
                 case 1:
@@ -77,6 +70,7 @@ namespace IoTSharp.Controllers.Models
                     }
                 case 4:
                     return target.Value<string>();
+
                 case 5:
                     {
                         DateTime v;
@@ -90,14 +84,11 @@ namespace IoTSharp.Controllers.Models
 
                 case 6:
 
-
                     if (target.HasValues)
                     {
-
                         return JsonConvert.SerializeObject(target.Value<JArray>().ToArray().Select(c => c.Value<int>()));
                     }
                     return "";
-
 
                 case 7:
 
@@ -106,6 +97,7 @@ namespace IoTSharp.Controllers.Models
                         return JsonConvert.SerializeObject(target.Value<JArray>().ToArray().Select(c => c.Value<string>()));
                     }
                     break;
+
                 case 8:
                     {
                         var vl = target.Value<string>();
@@ -121,10 +113,9 @@ namespace IoTSharp.Controllers.Models
                         return "";
                     }
 
-
-
                 case 9:
                     return target.Value<float>();
+
                 case 10:
                     {
                         var vl = target.Value<string>();
@@ -135,13 +126,11 @@ namespace IoTSharp.Controllers.Models
                             {
                                 return vl;
                             }
-
                         }
 
                         return "";
                     }
-                   
-              
+
                 case 11:
                     if (target.HasValues)
                     {
@@ -149,8 +138,8 @@ namespace IoTSharp.Controllers.Models
                             .Select(c => c.Value<DateTime>()));
                     }
                     break;
-                case 12:
 
+                case 12:
 
                     {
                         var vl = target.Value<string>();
@@ -166,12 +155,12 @@ namespace IoTSharp.Controllers.Models
                         return "";
                     }
 
-           
                 case 14:
 
                     var x = JsonConvert.SerializeObject(target.Value<JArray>());
 
                     return JsonConvert.SerializeObject(x);
+
                 case 15:
                     {
                         DateTimeOffset v;
@@ -184,20 +173,12 @@ namespace IoTSharp.Controllers.Models
                         return "";
                     }
 
-
-
-
                 case 13:
                     break;
                     //  return target.Value<bool>();
             }
 
-
-
-
             return "";
-
-
         }
     }
 }

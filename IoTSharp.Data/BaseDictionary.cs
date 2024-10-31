@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTSharp.Data
 {
@@ -12,8 +7,8 @@ namespace IoTSharp.Data
     {
         [Key]
         [DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
-
         public long DictionaryId { get; set; }
+
         public string DictionaryName { get; set; }
         public string DictionaryValue { get; set; }
         public string Dictionary18NKeyName { get; set; }

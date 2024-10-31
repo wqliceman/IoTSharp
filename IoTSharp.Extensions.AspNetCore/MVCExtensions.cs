@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Mvc
 {
@@ -23,6 +18,7 @@ namespace Microsoft.AspNetCore.Mvc
                 MethodName = cu.Name
             });
         }
+
         public static BadRequestObjectResult ExceptionRequest<T>(this ControllerBase @base, T code, string msg, Exception exception)
         {
             MethodBase mb = new StackTrace(exception).GetFrame(0).GetMethod();
@@ -38,6 +34,7 @@ namespace Microsoft.AspNetCore.Mvc
                 }
             });
         }
+
         public static BadRequestObjectResult ExceptionRequest(this ControllerBase @base, int code, string msg, Exception exception)
             => ExceptionRequest<int>(@base, code, msg, exception);
     }

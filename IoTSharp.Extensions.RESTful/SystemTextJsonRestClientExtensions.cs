@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using RestSharp;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using RestSharp;
-using System.IO;
 
 namespace System.Text.Json
 {
-   
     public static class SystemTextJsonRestClientExtensions
     {
         public static async Task<T> GetDataBy<T>(this Uri uri, params object[] objparam)
@@ -24,13 +19,14 @@ namespace System.Text.Json
                     });
                 }
             });
-
         }
+
         public static async Task<T> GetDataBy<T>(this Uri uri, Action<RestRequest> action)
         {
             return await GetDataBy<T>(uri, action, false);
         }
-        public static async Task<T> GetDataBy<T>(this Uri uri, Action<RestRequest> action, bool checktype )
+
+        public static async Task<T> GetDataBy<T>(this Uri uri, Action<RestRequest> action, bool checktype)
         {
             var result1 = default(T);
             var client = Create(uri);
@@ -48,7 +44,7 @@ namespace System.Text.Json
                     }
                     else
                     {
-                        result1 =System.Text.Json.JsonSerializer.Deserialize<T>(response.Content);
+                        result1 = System.Text.Json.JsonSerializer.Deserialize<T>(response.Content);
                     }
                 }
                 else
@@ -65,8 +61,6 @@ namespace System.Text.Json
             var request = new RestRequest();
             return await client.DownloadStreamAsync(request);
         }
-
-
 
         public static async Task<byte[]?> DownLoadFile(this Uri uri)
         {
@@ -86,6 +80,7 @@ namespace System.Text.Json
                 }
             });
         }
+
         public static async Task<R> PostDataBy<R>(this Uri uri, Action<RestRequest> action)
         {
             var result = default(R);
@@ -97,13 +92,11 @@ namespace System.Text.Json
             return result;
         }
 
-
         private static RestClient Create(Uri uri)
         {
-            var client = new RestClient(new RestClientOptions(uri) {  Timeout  = TimeSpan.FromSeconds(30), FollowRedirects = false });
+            var client = new RestClient(new RestClientOptions(uri) { Timeout = TimeSpan.FromSeconds(30), FollowRedirects = false });
             client.AddDefaultHeader(KnownHeaders.Accept, "*/*");
             return client;
         }
     }
 }
-
